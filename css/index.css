@@ -847,6 +847,97 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: var(--space-12);
 }
 
+/* ─── Hero Tracking Search Bar ─── */
+.hero__search {
+  margin-top: var(--space-2);
+  margin-bottom: var(--space-12);
+  width: 100%;
+  max-width: 580px;
+}
+
+.hero__search-label {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: var(--space-3);
+  letter-spacing: 0.5px;
+}
+
+.hero__search-input-group {
+  display: flex;
+  background: var(--white);
+  border-radius: var(--radius-xl);
+  padding: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.hero__search-input-group:focus-within {
+  box-shadow: 0 15px 35px rgba(212, 175, 55, 0.15), 0 0 0 2px rgba(212, 175, 55, 0.3);
+  transform: translateY(-2px);
+}
+
+.hero__search-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--navy-dark);
+  font-weight: 500;
+  outline: none;
+  width: 100%;
+}
+
+.hero__search-input::placeholder {
+  color: #a0aec0;
+}
+
+.hero__search-btn {
+  border-radius: var(--radius-lg) !important;
+  font-weight: 600;
+  padding: var(--space-3) var(--space-8) !important;
+  background: var(--gold) !important;
+  color: var(--navy-dark) !important;
+  border: none !important;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: none !important;
+  margin: 0 !important;
+  white-space: nowrap;
+}
+
+.hero__search-btn:hover {
+  background: var(--gold-light) !important;
+  transform: scale(1.02);
+}
+
+@media (max-width: 480px) {
+  .hero__search-input-group {
+    flex-direction: column;
+    background: transparent;
+    box-shadow: none;
+    gap: var(--space-2);
+    padding: 0;
+  }
+  .hero__search-input {
+    background: var(--white);
+    border-radius: var(--radius-xl);
+    padding: var(--space-4);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+  .hero__search-btn {
+    width: 100%;
+    padding: var(--space-4) !important;
+    text-align: center;
+    border-radius: var(--radius-xl) !important;
+    box-shadow: 0 10px 25px rgba(212, 175, 55, 0.15) !important;
+  }
+}
+
 .hero__stats {
   display: flex;
   gap: var(--space-8);

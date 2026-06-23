@@ -1088,6 +1088,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Read and trigger tracking from URL query parameter
+  const urlParams = new URLSearchParams(window.location.search);
+  const urlNum = urlParams.get('num');
+  if (urlNum && trackingInput) {
+    trackingInput.value = urlNum.trim();
+    performSearch(urlNum.trim());
+  }
+
 });
 
 })();

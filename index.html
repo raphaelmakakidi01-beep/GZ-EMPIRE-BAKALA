@@ -77,14 +77,19 @@
           <span data-i18n="hero.cta1">Demander un devis</span>
         </a>
         <a href="contact.html" class="btn btn--secondary btn--lg">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
           <span data-i18n="hero.cta2">Contacter un conseiller</span>
         </a>
-        <a href="tracking.html" class="btn btn--secondary btn--lg">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M2 8h20"/><path d="m9 17 3-3 3 3"/></svg>
-          <span data-i18n="hero.cta3">Suivre mon conteneur</span>
-        </a>
       </div>
+
+      <!-- Tracking Search Bar -->
+      <form class="hero__search reveal delay-3" action="tracking.html" method="GET">
+        <label class="hero__search-label" data-i18n="hero.search_label">Suivi de votre expédition</label>
+        <div class="hero__search-input-group">
+          <input type="text" name="num" class="hero__search-input" data-i18n-placeholder="hero.search_placeholder" placeholder="Saisissez votre numéro de suivi..." required>
+          <button type="submit" class="btn btn--primary hero__search-btn" data-i18n="hero.search_btn">Suivre</button>
+        </div>
+      </form>
 
       <div class="hero__stats reveal delay-4">
         <div class="hero__stat">
