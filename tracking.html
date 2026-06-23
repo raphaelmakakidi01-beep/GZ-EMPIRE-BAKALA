@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Suivez votre cargaison en temps réel avec GZ-EMPIRE BAKALA TRADING CO. Tracking de conteneurs, suivi maritime et livraison.">
+  <meta name="keywords" content="tracking, suivi cargaison, conteneur, import-export, Chine, Congo, GZ-EMPIRE">
+  <meta name="author" content="GZ-EMPIRE BAKALA TRADING CO., LTD">
+  <meta property="og:title" content="Suivi de Cargaison — GZ-EMPIRE BAKALA TRADING">
+  <meta property="og:description" content="Suivez votre cargaison en temps réel de la Chine vers l'Afrique.">
+  <meta property="og:type" content="website">
+  <title>Track My Cargo — GZ-EMPIRE BAKALA TRADING CO., LTD</title>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="css/tracking.css">
+</head>
+<body>
+  <!-- Page Transition Overlay -->
+  <div class="page-transition-overlay" id="pageTransitionOverlay">
+    <div class="page-transition-spinner"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       NAVBAR
+  ═══════════════════════════════════════════════════════════ -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar__inner">
+      <a href="index.html" class="navbar__logo">
+        <img src="img/logo.png" alt="G.Z EMPIRE" class="navbar__logo-img">
+      </a>
+
+      <div class="navbar__links" id="navLinks">
+        <a href="index.html" class="navbar__link" data-i18n="nav.home">Accueil</a>
+        <a href="tracking.html" class="navbar__link active" data-i18n="nav.tracking">Suivi</a>
+        <a href="quote.html" class="navbar__link" data-i18n="nav.quote">Devis</a>
+        <a href="portal.html" class="navbar__link" data-i18n="nav.portal">Portail</a>
+        
+        <a href="contact.html" class="navbar__link" data-i18n="nav.contact">Contact</a>
+      </div>
+
+      <div class="navbar__actions" id="navActions">
+        <div class="navbar__lang">
+          <button class="navbar__lang-btn active" data-lang="fr">FR</button>
+          <button class="navbar__lang-btn" data-lang="en">EN</button>
+          <button class="navbar__lang-btn" data-lang="zh">中文</button>
+        </div>
+        <a href="portal.html" class="btn btn--primary btn--sm" data-i18n="nav.client_area">Espace Client</a>
+      </div>
+
+      <button class="navbar__toggle" id="navToggle" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       PAGE HEADER
+  ═══════════════════════════════════════════════════════════ -->
+  <header class="page-header tracking-header">
+    <video class="page-header__video" autoplay muted loop playsinline>
+      <source src="video/0618.mp4" type="video/mp4">
+    </video>
+    <div class="page-header__particles" id="headerParticles"></div>
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html" data-i18n="breadcrumb.home">Accueil</a>
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        <span data-i18n="breadcrumb.tracking">Suivi de Cargaison</span>
+      </nav>
+      <h1 data-i18n="tracking.title">
+        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="tracking-header__icon"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg>
+        Track <span class="text-gradient">My Cargo</span>
+      </h1>
+      <p data-i18n="tracking.subtitle">Suivez votre cargaison en temps réel, de l'usine en Chine jusqu'à votre porte en Afrique.</p>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SEARCH SECTION
+  ═══════════════════════════════════════════════════════════ -->
+  <section class="section tracking-search-section">
+    <div class="container">
+      <div class="tracking-search-wrapper reveal">
+        <div class="tracking-search-card">
+          <div class="tracking-search-card__header">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <h2 data-i18n="tracking.search_title">Rechercher votre envoi</h2>
+          </div>
+          <form class="tracking-search" id="trackingForm" autocomplete="off">
+            <div class="tracking-search__input-wrapper">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="8" x="2" y="14" rx="2"/><rect width="20" height="8" x="2" y="2" rx="2"/><line x1="6" x2="6.01" y1="6" y2="6"/><line x1="6" x2="6.01" y1="18" y2="18"/></svg>
+              <input
+                type="text"
+                id="trackingInput"
+                class="form-input"
+                placeholder="Entrez votre numéro de conteneur, tracking ou référence..."
+                data-i18n-placeholder="tracking.search_placeholder"
+              >
+            </div>
+            <button type="submit" class="btn btn--primary btn--lg tracking-search__btn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              <span data-i18n="tracking.search_btn">Rechercher</span>
+            </button>
+          </form>
+          <div class="tracking-search-card__footer">
+            <span data-i18n="tracking.example_label">Exemple :</span>
+            <button type="button" class="tracking-demo-btn" id="demoBtn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+              GZEMP2024001
+            </button>
+            <span class="tracking-search-card__sep">|</span>
+            <button type="button" class="tracking-demo-btn" id="demoBtn2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+              COSCO-GZ-2024-0312
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Error Section (hidden by default) -->
+  <div id="trackingError" class="container hidden" style="margin-top: var(--space-8); max-width: 700px; margin-bottom: var(--space-8);">
+    <div class="card" style="background: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.25); text-align: center; padding: var(--space-8);">
+      <div style="width: 56px; height: 56px; border-radius: 50%; background: rgba(239,68,68,0.15); color: #EF4444; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-4);">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
+      </div>
+      <h3 style="color: var(--white); font-size: var(--text-lg); margin-bottom: var(--space-2);">Expédition non trouvée</h3>
+      <p style="color: rgba(255,255,255,0.6); font-size: var(--text-sm); max-width: 480px; margin: 0 auto;">Nous n'avons trouvé aucun colis ou conteneur correspondant à la référence <strong id="errorContainerId" style="color: var(--gold);"></strong>. Veuillez vérifier la référence saisie ou contacter votre conseiller GZ-EMPIRE.</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       RESULTS SECTION (hidden by default, shown after search)
+  ═══════════════════════════════════════════════════════════ -->
+  <section class="section section--gray tracking-results-section hidden" id="resultsSection">
+    <div class="container">
+
+      <!-- ── Shipment Info Card ── -->
+      <div class="tracking-info reveal" id="shipmentInfo">
+        <div class="tracking-info__card">
+          <div class="tracking-info__status-bar">
+            <div class="tracking-info__status-badge tracking-info__status-badge--transit" id="resStatusBadge">
+              <span class="tracking-info__status-pulse"></span>
+              <span id="resStatusText" data-i18n="tracking.status_transit">En Transit</span>
+            </div>
+            <div class="tracking-info__progress-bar">
+              <div class="tracking-info__progress-fill" id="resProgressFill" style="width: 62%"></div>
+            </div>
+            <span class="tracking-info__progress-label" id="resProgressLabel">62%</span>
+          </div>
+
+          <div class="tracking-info__grid">
+            <!-- Container -->
+            <div class="tracking-info__item">
+              <div class="tracking-info__item-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="8" x="2" y="14" rx="2"/><rect width="20" height="8" x="2" y="2" rx="2"/><line x1="6" x2="6.01" y1="6" y2="6"/><line x1="6" x2="6.01" y1="18" y2="18"/></svg>
+              </div>
+              <div>
+                <span class="tracking-info__label" data-i18n="tracking.container">Conteneur</span>
+                <strong class="tracking-info__value" id="resContainerId">GZEMP2024001</strong>
+              </div>
+            </div>
+
+            <!-- Origin -->
+            <div class="tracking-info__item">
+              <div class="tracking-info__item-icon tracking-info__item-icon--green">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+              </div>
+              <div>
+                <span class="tracking-info__label" data-i18n="tracking.origin">Origine</span>
+                <strong class="tracking-info__value" id="resOrigin">Guangzhou, China</strong>
+              </div>
+            </div>
+
+            <!-- Destination -->
+            <div class="tracking-info__item">
+              <div class="tracking-info__item-icon tracking-info__item-icon--blue">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+              </div>
+              <div>
+                <span class="tracking-info__label" data-i18n="tracking.destination">Destination</span>
+                <strong class="tracking-info__value" id="resDestination">Pointe-Noire, Congo</strong>
+              </div>
+            </div>
+
+            <!-- Departure -->
+            <div class="tracking-info__item">
+              <div class="tracking-info__item-icon tracking-info__item-icon--navy">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg>
+              </div>
+              <div>
+                <span class="tracking-info__label" data-i18n="tracking.departure">Départ</span>
+                <strong class="tracking-info__value" id="resDeparture">15 Mars 2024</strong>
+              </div>
+            </div>
+
+            <!-- ETA -->
+            <div class="tracking-info__item">
+              <div class="tracking-info__item-icon tracking-info__item-icon--gold">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+              <div>
+                <span class="tracking-info__label" data-i18n="tracking.eta">ETA</span>
+                <strong class="tracking-info__value tracking-info__value--gold" id="resETA">28 Avril 2024</strong>
+              </div>
+            </div>
+
+            <!-- Carrier -->
+            <div class="tracking-info__item">
+              <div class="tracking-info__item-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.94 5.34 2.81 7.76"/><path d="M19 13V7a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v6"/><path d="M12 10v4"/><path d="M12 2v3"/></svg>
+              </div>
+              <div>
+                <span class="tracking-info__label" data-i18n="tracking.carrier">Transporteur</span>
+                <strong class="tracking-info__value" id="resCarrier">COSCO Shipping</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <!-- ── Two-Column: Timeline + Details ── -->
+      <div class="tracking-columns">
+
+        <!-- Timeline -->
+        <div class="tracking-timeline-card reveal">
+          <div class="tracking-timeline-card__header">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/></svg>
+            <h3 data-i18n="tracking.timeline_title">Historique de l'envoi</h3>
+          </div>
+          <div class="timeline" id="timeline">
+            <!-- Step 1: Completed -->
+            <div class="timeline__item completed">
+              <div class="timeline__dot">
+                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              </div>
+              <div class="timeline__content">
+                <span class="timeline__title" data-i18n="tracking.step1_title">Commande confirmée</span>
+                <p class="timeline__desc" data-i18n="tracking.step1_desc">Votre commande a été validée et confirmée par l'équipe commerciale.</p>
+                <span class="timeline__date">01 Mars 2024 — 09:30</span>
+              </div>
+            </div>
+
+            <!-- Step 2: Completed -->
+            <div class="timeline__item completed">
+              <div class="timeline__dot">
+                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              </div>
+              <div class="timeline__content">
+                <span class="timeline__title" data-i18n="tracking.step2_title">Production terminée</span>
+                <p class="timeline__desc" data-i18n="tracking.step2_desc">Tous les produits ont été fabriqués selon les spécifications.</p>
+                <span class="timeline__date">10 Mars 2024 — 16:00</span>
+              </div>
+            </div>
+
+            <!-- Step 3: Completed -->
+            <div class="timeline__item completed">
+              <div class="timeline__dot">
+                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              </div>
+              <div class="timeline__content">
+                <span class="timeline__title" data-i18n="tracking.step3_title">Contrôle qualité passé</span>
+                <p class="timeline__desc" data-i18n="tracking.step3_desc">Inspection qualité réussie — conformité vérifiée à 100%.</p>
+                <span class="timeline__date">13 Mars 2024 — 11:15</span>
+              </div>
+            </div>
+
+            <!-- Step 4: Completed -->
+            <div class="timeline__item completed">
+              <div class="timeline__dot">
+                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              </div>
+              <div class="timeline__content">
+                <span class="timeline__title" data-i18n="tracking.step4_title">Chargement conteneur</span>
+                <p class="timeline__desc" data-i18n="tracking.step4_desc">Marchandises chargées dans le conteneur 40'HC et scellées.</p>
+                <span class="timeline__date">14 Mars 2024 — 08:45</span>
+              </div>
+            </div>
+
+            <!-- Step 5: Completed -->
+            <div class="timeline__item completed">
+              <div class="timeline__dot">
+                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+              </div>
+              <div class="timeline__content">
+                <span class="timeline__title" data-i18n="tracking.step5_title">Départ port de Guangzhou</span>
+                <p class="timeline__desc" data-i18n="tracking.step5_desc">Le navire a quitté le port de Nansha, Guangzhou.</p>
+                <span class="timeline__date">15 Mars 2024 — 06:00</span>
+              </div>
+            </div>
+
+            <!-- Step 6: Active (in transit) -->
+            <div class="timeline__item active">
+              <div class="timeline__dot">
+                <div class="timeline__dot-pulse"></div>
+              </div>
+              <div class="timeline__content">
+                <span class="timeline__title" data-i18n="tracking.step6_title">En transit maritime</span>
+                <p class="timeline__desc" data-i18n="tracking.step6_desc">Le navire est actuellement en Océan Indien, en route vers l'Afrique.</p>
+                <span class="timeline__date timeline__date--active" data-i18n="tracking.step6_date">En cours — Dernière mise à jour il y a 2h</span>
+              </div>
+            </div>
+
+            <!-- Step 7: Pending -->
+            <div class="timeline__item pending">
+              <div class="timeline__dot"></div>
+              <div class="timeline__content">
+                <span class="timeline__title" data-i18n="tracking.step7_title">Arrivée port de Pointe-Noire</span>
+                <p class="timeline__desc" data-i18n="tracking.step7_desc">Le navire accostera au port autonome de Pointe-Noire.</p>
+                <span class="timeline__date" data-i18n="tracking.step7_date">Est. 25 Avril 2024</span>
+              </div>
+            </div>
+
+            <!-- Step 8: Pending -->
+            <div class="timeline__item pending">
+              <div class="timeline__dot"></div>
+              <div class="timeline__content">
+                <span class="timeline__title" data-i18n="tracking.step8_title">Dédouanement</span>
+                <p class="timeline__desc" data-i18n="tracking.step8_desc">Procédures douanières et vérifications documentaires.</p>
+                <span class="timeline__date" data-i18n="tracking.step8_date">Est. 26-27 Avril 2024</span>
+              </div>
+            </div>
+
+            <!-- Step 9: Pending -->
+            <div class="timeline__item pending">
+              <div class="timeline__dot"></div>
+              <div class="timeline__content">
+                <span class="timeline__title" data-i18n="tracking.step9_title">Livraison finale</span>
+                <p class="timeline__desc" data-i18n="tracking.step9_desc">Livraison à l'adresse finale du client.</p>
+                <span class="timeline__date" data-i18n="tracking.step9_date">Est. 28 Avril 2024</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Shipment Details + Alert Subscription -->
+        <div class="tracking-sidebar">
+
+          <!-- Shipment Details Grid -->
+          <div class="tracking-details-card reveal">
+            <div class="tracking-details-card__header">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>
+              <h3 data-i18n="tracking.details_title">Détails de l'envoi</h3>
+            </div>
+            <div class="tracking-details-grid">
+              <div class="tracking-detail">
+                <div class="tracking-detail__icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/></svg>
+                </div>
+                <div class="tracking-detail__info">
+                  <span class="tracking-detail__label" data-i18n="tracking.weight">Poids</span>
+                  <strong class="tracking-detail__value" id="resWeight">12 500 kg</strong>
+                </div>
+              </div>
+
+              <div class="tracking-detail">
+                <div class="tracking-detail__icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                </div>
+                <div class="tracking-detail__info">
+                  <span class="tracking-detail__label" data-i18n="tracking.volume">Volume</span>
+                  <strong class="tracking-detail__value" id="resVolume">33 CBM</strong>
+                </div>
+              </div>
+
+              <div class="tracking-detail">
+                <div class="tracking-detail__icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="8" x="2" y="14" rx="2"/><rect width="20" height="8" x="2" y="2" rx="2"/><line x1="6" x2="6.01" y1="6" y2="6"/><line x1="6" x2="6.01" y1="18" y2="18"/></svg>
+                </div>
+                <div class="tracking-detail__info">
+                  <span class="tracking-detail__label" data-i18n="tracking.container_type">Type conteneur</span>
+                  <strong class="tracking-detail__value" id="resContainerType">40' HC</strong>
+                </div>
+              </div>
+
+              <div class="tracking-detail">
+                <div class="tracking-detail__icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                </div>
+                <div class="tracking-detail__info">
+                  <span class="tracking-detail__label" data-i18n="tracking.seal_number">N° de scellé</span>
+                  <strong class="tracking-detail__value" id="resSealNumber">GZ2024-8847</strong>
+                </div>
+              </div>
+
+              <div class="tracking-detail tracking-detail--full">
+                <div class="tracking-detail__icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/></svg>
+                </div>
+                <div class="tracking-detail__info">
+                  <span class="tracking-detail__label" data-i18n="tracking.bill_of_lading">Connaissement (B/L)</span>
+                  <strong class="tracking-detail__value" id="resBillOfLading">COSCO-GZ-2024-0312</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Alert Subscription -->
+          <div class="tracking-alert-card reveal">
+            <div class="tracking-alert-card__header">
+              <div class="tracking-alert-card__icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+              </div>
+              <div>
+                <h3 data-i18n="tracking.alert_title">Alertes automatiques</h3>
+                <p data-i18n="tracking.alert_desc">Recevez les mises à jour de votre envoi</p>
+              </div>
+            </div>
+            <form class="tracking-alert-form" id="alertForm">
+              <div class="form-group">
+                <label class="form-label" for="alertEmail" data-i18n="tracking.alert_email_label">Adresse email</label>
+                <div class="tracking-alert-form__input-wrapper">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                  <input
+                    type="email"
+                    id="alertEmail"
+                    class="form-input"
+                    placeholder="votre@email.com"
+                    required
+                  >
+                </div>
+              </div>
+
+              <div class="tracking-alert-toggle">
+                <div class="tracking-alert-toggle__info">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#25D366" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  <span data-i18n="tracking.whatsapp_toggle">Notifications WhatsApp</span>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="whatsappToggle">
+                  <span class="toggle-switch__slider"></span>
+                </label>
+              </div>
+
+              <div class="form-group hidden" id="whatsappNumberGroup" style="margin-top: var(--space-4); margin-bottom: var(--space-4);">
+                <label class="form-label" for="alertWhatsapp" data-i18n="tracking.alert_whatsapp_label">Numéro WhatsApp</label>
+                <div class="tracking-alert-form__input-wrapper">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  <input
+                    type="tel"
+                    id="alertWhatsapp"
+                    class="form-input"
+                    placeholder="+243 818 247 812"
+                  >
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn--dark w-full">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                <span data-i18n="tracking.alert_btn">S'abonner aux alertes</span>
+              </button>
+            </form>
+            <div class="tracking-alert-success hidden" id="alertSuccess">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/></svg>
+              <p data-i18n="tracking.alert_success">Vous recevrez les alertes par email et/ou WhatsApp.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       FOOTER
+  ═══════════════════════════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <!-- Brand -->
+        <div class="footer__brand">
+          <div class="footer__brand-logo">
+            <img src="img/logo.png" alt="G.Z EMPIRE" class="logo-img" style="height: 48px;">
+          </div>
+          <p data-i18n="footer.description">Votre partenaire de confiance pour le sourcing et l'import-export de la Chine vers l'Afrique et le monde entier.</p>
+          <div class="footer__social">
+            <a href="#" aria-label="WeChat">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </a>
+            <a href="#" aria-label="WhatsApp">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </a>
+            <a href="#" aria-label="LinkedIn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+            <a href="mailto:empire.bakala@gmail.com" aria-label="Email">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Services -->
+        <div>
+          <h4 class="footer__col-title" data-i18n="footer.services_title">Services</h4>
+          <ul class="footer__links">
+            <li><a href="quote.html" data-i18n="footer.sourcing">Sourcing Produits</a></li>
+            <li><a href="quote.html" data-i18n="footer.logistics">Logistique Maritime</a></li>
+            <li><a href="quote.html" data-i18n="footer.customs">Dédouanement</a></li>
+            <li><a href="quote.html" data-i18n="footer.quality">Contrôle Qualité</a></li>
+            <li><a href="quote.html" data-i18n="footer.consolidation">Consolidation</a></li>
+          </ul>
+        </div>
+
+        <!-- Company -->
+        <div>
+          <h4 class="footer__col-title" data-i18n="footer.company_title">Entreprise</h4>
+          <ul class="footer__links">
+            <li><a href="index.html" data-i18n="footer.about">À propos</a></li>
+            
+            <li><a href="contact.html" data-i18n="footer.contact">Contact</a></li>
+            <li><a href="tracking.html" data-i18n="footer.tracking">Suivi Cargaison</a></li>
+            <li><a href="portal.html" data-i18n="footer.portal">Espace Client</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact -->
+        <div>
+          <h4 class="footer__col-title" data-i18n="footer.contact_title">Contact</h4>
+          <ul class="footer__links">
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:6px"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <a href="tel:+8618320050031">+86 183 2005 0031</a>
+            </li>
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:6px"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <a href="tel:+243818247812">+243 818 247 812</a>
+            </li>
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:6px"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+              <a href="mailto:empire.bakala@gmail.com">empire.bakala@gmail.com</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer__bottom">
+        <p>&copy; 2024 GZ-EMPIRE BAKALA TRADING CO., LTD. <span data-i18n="footer.rights">Tous droits réservés.</span></p>
+        <div class="flex gap-4">
+          <a href="#" data-i18n="footer.privacy">Politique de confidentialité</a>
+          <a href="#" data-i18n="footer.terms">Conditions d'utilisation</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SCRIPTS
+  ═══════════════════════════════════════════════════════════ -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/tracking.js"></script>
+  <script src="js/assistant.js"></script>
+
+</body>
+</html>

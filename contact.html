@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Contactez GZ-EMPIRE BAKALA TRADING CO., LTD. Sourcing, logistique, douane et import-export de la Chine vers le monde entier.">
+  <meta name="keywords" content="contact GZ-EMPIRE, import-export Chine, sourcing Guangzhou, bureau d'achat Chine, logistique Afrique">
+  <meta name="author" content="GZ-EMPIRE BAKALA TRADING CO., LTD">
+  <meta property="og:title" content="Contactez-nous — GZ-EMPIRE BAKALA TRADING">
+  <meta property="og:description" content="Contactez nos bureaux de Guangzhou (Chine) ou Kinshasa (Congo) pour vos besoins d'import-export et logistique.">
+  <meta property="og:type" content="website">
+  <title>Contactez-nous — GZ-EMPIRE BAKALA TRADING</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="css/contact.css">
+</head>
+<body>
+  <!-- Page Transition Overlay -->
+  <div class="page-transition-overlay" id="pageTransitionOverlay">
+    <div class="page-transition-spinner"></div>
+  </div>
+
+  <!-- ═══════ NAVBAR ═══════ -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar__inner">
+      <a href="index.html" class="navbar__logo">
+        <img src="img/logo.png" alt="G.Z EMPIRE" class="navbar__logo-img">
+      </a>
+      <div class="navbar__links" id="navLinks">
+        <a href="index.html" class="navbar__link" data-i18n="nav.home">Accueil</a>
+        <a href="tracking.html" class="navbar__link" data-i18n="nav.tracking">Suivi</a>
+        <a href="quote.html" class="navbar__link" data-i18n="nav.quote">Devis</a>
+        <a href="portal.html" class="navbar__link" data-i18n="nav.portal">Portail</a>
+        
+        <a href="contact.html" class="navbar__link active" data-i18n="nav.contact">Contact</a>
+      </div>
+      <div class="navbar__actions" id="navActions">
+        <div class="navbar__lang">
+          <button class="navbar__lang-btn active" data-lang="fr">FR</button>
+          <button class="navbar__lang-btn" data-lang="en">EN</button>
+          <button class="navbar__lang-btn" data-lang="zh">中文</button>
+        </div>
+        <a href="portal.html" class="btn btn--primary btn--sm" data-i18n="nav.cta">Espace Client</a>
+      </div>
+      <button class="navbar__toggle" id="navToggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ═══════ PAGE HEADER ═══════ -->
+  <header class="page-header">
+    <video class="page-header__video" autoplay muted loop playsinline>
+      <source src="video/0618.mp4" type="video/mp4">
+    </video>
+    <div class="page-header__particles" id="headerParticles"></div>
+    <div class="container">
+      <span class="hero__badge">
+        <span class="hero__badge-dot"></span>
+        <span data-i18n="contact.badge">À votre service</span>
+      </span>
+      <h1 data-i18n="contact.title">Contactez-<span class="text-gradient">nous</span></h1>
+      <p data-i18n="contact.subtitle">Vous avez un projet d'importation depuis la Chine ? Une question sur notre logistique ? Notre équipe d'experts vous répond sous 24 heures.</p>
+    </div>
+  </header>
+
+  <!-- ═══════ CONTACT CONTENT ═══════ -->
+  <section class="section">
+    <div class="container">
+      <div class="contact-layout">
+        
+        <!-- Contact Form Card -->
+        <div class="contact-form-card reveal">
+          <div id="contactFormContainer">
+            <div class="contact-form-card__image-wrapper">
+              <img src="photo/01.jpg?v=2" alt="GZ-Empire Warehouse" class="contact-form-card__image">
+            </div>
+            <h2 class="contact-form-card__title" data-i18n="contact.form.title">Envoyez-nous un message</h2>
+            <p class="contact-form-card__subtitle" data-i18n="contact.form.subtitle">Remplissez ce formulaire et notre conseiller commercial vous contactera rapidement par email ou WhatsApp.</p>
+            
+            <form id="contactPageForm" class="flex flex-col gap-5">
+              <div class="contact-form__row">
+                <div class="form-group">
+                  <label for="contactName" class="form-label" data-i18n="contact.form.name">Nom complet</label>
+                  <input type="text" id="contactName" class="form-input" placeholder="Ex: Jean-Baptiste" required>
+                </div>
+                <div class="form-group">
+                  <label for="contactEmail" class="form-label" data-i18n="contact.form.email">Adresse email</label>
+                  <input type="email" id="contactEmail" class="form-input" placeholder="Ex: contact@exemple.com" required>
+                </div>
+              </div>
+              
+              <div class="contact-form__row">
+                <div class="form-group">
+                  <label for="contactPhone" class="form-label" data-i18n="contact.form.phone">Téléphone (WhatsApp conseillé)</label>
+                  <input type="tel" id="contactPhone" class="form-input" placeholder="Ex: +243 818 247 812" required>
+                </div>
+                <div class="form-group">
+                  <label for="contactCountry" class="form-label" data-i18n="contact.form.country">Pays de destination</label>
+                  <select id="contactCountry" class="form-input" required>
+                    <option value="" disabled selected>Sélectionnez votre pays</option>
+                    <option value="Congo-Brazzaville">Congo-Brazzaville</option>
+                    <option value="RDC">RD Congo</option>
+                    <option value="Cameroun">Cameroun</option>
+                    <option value="Cote-d-Ivoire">Côte d'Ivoire</option>
+                    <option value="Senegal">Sénégal</option>
+                    <option value="France">France</option>
+                    <option value="Belgique">Belgique</option>
+                    <option value="Autre">Autre pays</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="contactSubject" class="form-label" data-i18n="contact.form.subject">Objet de votre demande</label>
+                <select id="contactSubject" class="form-input" required>
+                  <option value="" disabled selected>Choisissez le sujet principal</option>
+                  <option value="devis" data-i18n="contact.subject.devis">Demande de devis d'importation</option>
+                  <option value="suivi" data-i18n="contact.subject.suivi">Suivi d'expédition ou conteneur</option>
+                  <option value="sourcing" data-i18n="contact.subject.sourcing">Recherche de fournisseur chinois (Sourcing)</option>
+                  <option value="partenariat" data-i18n="contact.subject.partenariat">Opportunités de partenariat</option>
+                  <option value="autre" data-i18n="contact.subject.autre">Autre demande générale</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="contactMessage" class="form-label" data-i18n="contact.form.message">Détaillez votre projet ou message</label>
+                <textarea id="contactMessage" class="form-input" rows="5" placeholder="Décrivez les produits, les quantités, et vos questions..." required></textarea>
+              </div>
+
+              <div class="contact-form__privacy">
+                <input type="checkbox" id="contactPrivacy" required>
+                <label for="contactPrivacy" data-i18n="contact.form.privacy">J'accepte que mes données soient transmises à GZ-EMPIRE pour traiter ma demande conformément à la <a href="#">politique de confidentialité</a>.</label>
+              </div>
+
+              <button type="submit" class="btn btn--primary w-full">
+                <span data-i18n="contact.form.submit">Envoyer ma demande</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+              </button>
+            </form>
+          </div>
+
+          <!-- Success state -->
+          <div id="contactSuccess" class="contact-form__success">
+            <div class="contact-form__success-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            </div>
+            <h3 data-i18n="contact.success.title">Message envoyé avec succès !</h3>
+            <p data-i18n="contact.success.text">Merci pour votre confiance. Un expert commercial de GZ-EMPIRE analyse votre message et vous recontactera très rapidement (sous 24 heures ouvrées).</p>
+          </div>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="contact-info-card reveal delay-1">
+          
+          <!-- Phones Block -->
+          <div class="contact-info-block">
+            <h3 class="contact-info-block__title">
+              <div class="contact-info-block__title-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              </div>
+              <span data-i18n="contact.info.phones">Lignes téléphoniques</span>
+            </h3>
+            <div class="contact-info__list">
+              <div class="contact-info__item">
+                <div class="contact-info__item-icon contact-info__item-icon--phone" style="font-size: 11px; font-weight: 700; color: var(--color-gold); display: flex; align-items: center; justify-content: center;">CN</div>
+                <div>
+                  <div class="contact-info__item-label" data-i18n="contact.info.china">Bureau Guangzhou (Chine)</div>
+                  <div class="contact-info__item-value"><a href="tel:+8618320050031">+86 183 2005 0031</a></div>
+                </div>
+              </div>
+              <div class="contact-info__item">
+                <div class="contact-info__item-icon contact-info__item-icon--phone" style="font-size: 11px; font-weight: 700; color: var(--color-gold); display: flex; align-items: center; justify-content: center;">CG</div>
+                <div>
+                  <div class="contact-info__item-label" data-i18n="contact.info.congo">Agence Pointe-Noire (Congo)</div>
+                  <div class="contact-info__item-value"><a href="tel:+243818247812">+243 818 247 812</a></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Digital Contact & WhatsApp -->
+          <div class="contact-info-block">
+            <h3 class="contact-info-block__title">
+              <div class="contact-info-block__title-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+              </div>
+              <span data-i18n="contact.info.digital">Contact Digital</span>
+            </h3>
+            <div class="contact-info__list" style="margin-bottom: 20px;">
+              <div class="contact-info__item">
+                <div class="contact-info__item-icon contact-info__item-icon--email">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                </div>
+                <div>
+                  <div class="contact-info__item-label">Adresse Email</div>
+                  <div class="contact-info__item-value"><a href="mailto:empire.bakala@gmail.com">empire.bakala@gmail.com</a></div>
+                </div>
+              </div>
+            </div>
+            
+            <a href="https://wa.me/8618320050031" target="_blank" class="contact-whatsapp-btn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.977h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.69-4.98c-.202-.1-.1.195-.582-.24-.268-.268-.523-.393-.765-.466-.24-.074-.51-.049-.761.12-.247.169-.475.405-.62.617-.145.212-.3.424-.51.424-.21 0-.452-.086-.713-.231a4.922 4.922 0 0 1-1.208-.963 5.068 5.068 0 0 1-.836-1.04c-.16-.277-.018-.426.12-.563.125-.124.269-.31.405-.466.136-.156.182-.268.272-.447.09-.179.046-.336-.023-.468-.069-.131-.58-1.402-.795-1.921-.21-.51-.43-.44-.582-.448-.15-.008-.323-.008-.496-.008s-.452.064-.69.323a2.31 2.31 0 0 0-.713 1.706c0 1.07.778 2.1 1.085 2.516.307.415 2.1 3.2 5.08 4.49.71.3 1.258.48 1.688.617.71.22 1.35.19 1.86.11.56-.08 1.71-.7 1.95-1.37.24-.68.24-1.26.17-1.37a.89.89 0 0 0-.58-.396z"/>
+              </svg>
+              <span data-i18n="contact.info.whatsappBtn">Nous écrire sur WhatsApp</span>
+            </a>
+          </div>
+
+          <!-- Location & Hours -->
+          <div class="contact-info-block">
+            <h3 class="contact-info-block__title">
+              <div class="contact-info-block__title-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+              </div>
+              <span data-i18n="contact.info.locationTitle">Siège Social & Horaires</span>
+            </h3>
+            <div class="contact-info__list">
+              <div class="contact-info__item">
+                <div class="contact-info__item-icon contact-info__item-icon--location" style="font-size: 11px; font-weight: 700; color: var(--color-gold); display: flex; align-items: center; justify-content: center;">CN</div>
+                <div>
+                  <div class="contact-info__item-label" data-i18n="contact.info.addressLabel">Adresse Bureau Chine</div>
+                  <div class="contact-info__item-value" data-i18n="contact.info.addressValue">Guangzhou, Guangdong Province, China</div>
+                </div>
+              </div>
+              <div class="contact-info__item">
+                <div class="contact-info__item-icon contact-info__item-icon--clock">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                </div>
+                <div>
+                  <div class="contact-info__item-label" data-i18n="contact.info.hoursLabel">Heures d'ouverture</div>
+                  <div class="contact-info__item-value" data-i18n="contact.info.hoursValue">Lundi - Samedi : 9h00 - 18h00 (Heure de Pékin)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════ MAP SECTION ═══════ -->
+  <section class="map-section section--gray">
+    <div class="container">
+      <div class="map-section__header reveal">
+        <h2 class="map-section__title" data-i18n="contact.map.title">Localisez nos bureaux à Guangzhou</h2>
+        <p class="map-section__subtitle" data-i18n="contact.map.subtitle">Situés au cœur commercial de la Chine pour assurer un sourcing optimal et réactif.</p>
+      </div>
+      <div id="contactMap" class="contact-map reveal delay-1"></div>
+    </div>
+  </section>
+
+  <!-- ═══════ FAQ SECTION ═══════ -->
+  <section class="faq-section">
+    <div class="container">
+      <div class="faq-section__header reveal">
+        <h2 class="faq-section__title" data-i18n="contact.faq.title">Questions Fréquentes</h2>
+        <p class="faq-section__subtitle" data-i18n="contact.faq.subtitle">Voici les réponses aux questions les plus couramment posées par nos clients.</p>
+      </div>
+
+      <div class="faq-list">
+        
+        <!-- FAQ 1 -->
+        <div class="faq-item reveal">
+          <button class="faq-item__question">
+            <span data-i18n="contact.faq.q1">Comment demander un devis ?</span>
+            <div class="faq-item__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </div>
+          </button>
+          <div class="faq-item__answer">
+            <div class="faq-item__answer-inner" data-i18n="contact.faq.a1">
+              Vous pouvez demander un devis directement via notre page <a href="quote.html">Demande de Devis</a>. Il vous suffit de remplir les détails de votre produit, la quantité estimée, la destination, et de sélectionner le mode de transport désiré (aérien, maritime, ou mixte). Notre algorithme fournit une première estimation, puis un conseiller commercial valide et ajuste l'offre.
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ 2 -->
+        <div class="faq-item reveal delay-1">
+          <button class="faq-item__question">
+            <span data-i18n="contact.faq.q2">Quels sont les délais de livraison depuis la Chine ?</span>
+            <div class="faq-item__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </div>
+          </button>
+          <div class="faq-item__answer">
+            <div class="faq-item__answer-inner" data-i18n="contact.faq.a2">
+              Les délais dépendent principalement du mode de transport choisi. Le fret maritime prend généralement entre 25 et 45 jours (vers l'Afrique de l'Ouest/Centrale ou l'Europe). Le fret aérien express prend entre 5 et 10 jours ouvrés. Notre solution mixte combine les deux pour un compromis de 15 à 25 jours.
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ 3 -->
+        <div class="faq-item reveal delay-2">
+          <button class="faq-item__question">
+            <span data-i18n="contact.faq.q3">Comment suivre ma commande ou mon conteneur ?</span>
+            <div class="faq-item__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </div>
+          </button>
+          <div class="faq-item__answer">
+            <div class="faq-item__answer-inner" data-i18n="contact.faq.a3">
+              Rendez-vous sur notre page <a href="tracking.html">Suivi de Marchandise</a>. Entrez votre numéro de conteneur, de tracking, ou de référence commerciale GZ-EMPIRE pour voir l'état actuel de votre cargaison, sa position géographique sur notre carte interactive, ainsi que les étapes logistiques franchies et à venir.
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ 4 -->
+        <div class="faq-item reveal delay-3">
+          <button class="faq-item__question">
+            <span data-i18n="contact.faq.q4">Quels pays desservez-vous pour l'import-export ?</span>
+            <div class="faq-item__icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </div>
+          </button>
+          <div class="faq-item__answer">
+            <div class="faq-item__answer-inner" data-i18n="contact.faq.a4">
+              GZ-EMPIRE opère principalement depuis la Chine vers l'Afrique Centrale et de l'Ouest (Congo-Brazzaville, RDC, Cameroun, Côte d'Ivoire, Sénégal), mais nous desservons également l'Europe (France, Belgique) et l'Amérique du Nord (USA, Canada). Notre réseau logistique s'adapte à de multiples destinations internationales.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════ FOOTER ═══════ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <div class="footer__brand-logo">
+            <img src="img/logo.png" alt="G.Z EMPIRE" class="logo-img" style="height: 48px;">
+          </div>
+          <p data-i18n="footer.description">Votre partenaire de confiance pour l'import-export entre la Chine et le monde. Solutions de sourcing, logistique et commerce international.</p>
+          <div class="footer__social">
+            <a href="#" aria-label="WhatsApp">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </a>
+            <a href="mailto:empire.bakala@gmail.com" aria-label="Email">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+            </a>
+            <a href="#" aria-label="WeChat">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+            </a>
+          </div>
+        </div>
+        <div>
+          <h4 class="footer__col-title" data-i18n="footer.services">Services</h4>
+          <ul class="footer__links">
+            <li><a href="#" data-i18n="footer.sourcing">Sourcing Chine</a></li>
+            <li><a href="#" data-i18n="footer.logistics">Logistique</a></li>
+            <li><a href="#" data-i18n="footer.customs">Dédouanement</a></li>
+            <li><a href="#" data-i18n="footer.quality">Contrôle qualité</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer__col-title" data-i18n="footer.company">Entreprise</h4>
+          <ul class="footer__links">
+            <li><a href="index.html" data-i18n="footer.about">À propos</a></li>
+            
+            <li><a href="contact.html" data-i18n="footer.contact">Contact</a></li>
+            <li><a href="#" data-i18n="footer.careers">Carrières</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer__col-title" data-i18n="footer.contactTitle">Contact</h4>
+          <ul class="footer__links">
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:6px"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              +86 183 2005 0031
+            </li>
+            <li>
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:6px"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+              empire.bakala@gmail.com
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p>&copy; 2024 GZ-EMPIRE BAKALA TRADING CO., LTD. Tous droits réservés.</p>
+        <div class="flex gap-4">
+          <a href="#" data-i18n="footer.privacy">Confidentialité</a>
+          <a href="#" data-i18n="footer.terms">Conditions</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="js/main.js"></script>
+  <script src="js/assistant.js"></script>
+  
+  <script>
+    (function() {
+      // Safe localStorage wrapper for file:// protocol compatibility
+      let localStorage;
+      try {
+        localStorage = window.localStorage;
+        localStorage.getItem('test-local-storage');
+      } catch (e) {
+        const store = {};
+        localStorage = {
+          getItem: (key) => store[key] !== undefined ? store[key] : null,
+          setItem: (key, val) => { store[key] = String(val); },
+          removeItem: (key) => { delete store[key]; },
+          clear: () => { for (let k in store) delete store[k]; }
+        };
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+      // ─── FAQ Accordion Toggle ───
+      const faqItems = document.querySelectorAll('.faq-item');
+      faqItems.forEach(item => {
+        const question = item.querySelector('.faq-item__question');
+        question.addEventListener('click', () => {
+          const isActive = item.classList.contains('active');
+          faqItems.forEach(i => i.classList.remove('active'));
+          if (!isActive) {
+            item.classList.add('active');
+          }
+        });
+      });
+
+      // ─── Leaflet Map initialization ───
+      // Guangzhou coords: 23.1291, 113.2644
+      const map = L.map('contactMap', {
+        center: [23.2267, 113.2421],
+        zoom: 14,
+        scrollWheelZoom: false
+      });
+
+      // Tile layer
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 20
+      }).addTo(map);
+
+      // Custom icon using gold theme
+      const goldIcon = L.divIcon({
+        className: 'custom-map-marker',
+        html: `
+          <div style="
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #D4AF37, #B8960E);
+            border: 3px solid #071A52;
+            border-radius: 50%;
+            box-shadow: 0 4px 15px rgba(212,175,55,0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #071A52;
+            font-weight: bold;
+            font-size: 10px;
+            animation: pulse-dot 2s ease-in-out infinite;
+          ">GZ</div>
+        `,
+        iconSize: [24, 24],
+        iconAnchor: [12, 12]
+      });
+
+      // Add marker at warehouse location
+      const marker = L.marker([23.2267, 113.2421], { icon: goldIcon }).addTo(map);
+
+      // Popup
+      marker.bindPopup(`
+        <div class="map-popup">
+          <div class="map-popup__title">GZ EMPIRE BAKALA WAREHOUSE</div>
+          <div class="map-popup__address">No. 70, Da Lang Middle Road, Baiyun District, Guangzhou, China<br><strong>WhatsApp:</strong> +86 183 2005 0031</div>
+        </div>
+      `).openPopup();
+
+      // ─── Form Submission ───
+      const contactPageForm = document.getElementById('contactPageForm');
+      const contactSuccess = document.getElementById('contactSuccess');
+      
+      if (contactPageForm && contactSuccess) {
+        contactPageForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          
+          const submitBtn = contactPageForm.querySelector('button[type="submit"]');
+          const originalText = submitBtn.innerHTML;
+          
+          submitBtn.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="animation: rotate 1s linear infinite; display: inline-block; vertical-align: middle; margin-right: 8px;"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+            Envoi en cours...
+          `;
+          submitBtn.disabled = true;
+
+          // Simulate API call and saving to localStorage for CRM
+          setTimeout(() => {
+            // Get values
+            const name = document.getElementById('contactName').value;
+            const email = document.getElementById('contactEmail').value;
+            const phone = document.getElementById('contactPhone').value;
+            const country = document.getElementById('contactCountry').value;
+            const subject = document.getElementById('contactSubject').value;
+            const message = document.getElementById('contactMessage').value;
+
+            // Save lead to localstorage
+            const newProspect = {
+              name,
+              email,
+              phone,
+              country,
+              product: subject === 'devis' ? 'Fret/Import' : subject === 'sourcing' ? 'Sourcing' : 'Général',
+              budget: 'Non spécifié',
+              status: 'Nouveau',
+              date: new Date().toLocaleDateString('fr-FR')
+            };
+
+            const prospectsList = JSON.parse(localStorage.getItem('gz-empire-prospects') || '[]');
+            prospectsList.unshift(newProspect);
+            localStorage.setItem('gz-empire-prospects', JSON.stringify(prospectsList));
+
+            // Show success state
+            document.getElementById('contactFormContainer').style.display = 'none';
+            contactSuccess.classList.add('show');
+          }, 1500);
+        });
+      }
+    });
+    })();
+  </script>
+</body>
+</html>

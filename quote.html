@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Demandez un devis personnalisé pour vos importations depuis la Chine. GZ-EMPIRE BAKALA — sourcing, transport et dédouanement sur mesure.">
+  <meta name="keywords" content="devis import Chine, fret maritime, fret aérien, sourcing Chine, import export Afrique, GZ-EMPIRE">
+  <meta name="author" content="GZ-EMPIRE BAKALA TRADING CO., LTD">
+  <meta property="og:title" content="Demande de Devis — GZ-EMPIRE BAKALA TRADING">
+  <meta property="og:description" content="Obtenez une estimation personnalisée pour vos importations depuis la Chine en quelques minutes.">
+  <meta property="og:type" content="website">
+  <title>Demande de Devis — GZ-EMPIRE BAKALA TRADING CO., LTD</title>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="css/quote.css">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23071A52'/%3E%3Ctext x='50%25' y='55%25' text-anchor='middle' dominant-baseline='central' font-family='Arial' font-weight='900' font-size='18' fill='%23D4AF37'%3EGZ%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+  <!-- Page Transition Overlay -->
+  <div class="page-transition-overlay" id="pageTransitionOverlay">
+    <div class="page-transition-spinner"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       NAVBAR
+       ═══════════════════════════════════════════════════════════ -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar__inner">
+      <a href="index.html" class="navbar__logo">
+        <img src="img/logo.png" alt="G.Z EMPIRE" class="navbar__logo-img">
+      </a>
+
+      <div class="navbar__links" id="navLinks">
+        <a href="index.html" class="navbar__link" data-i18n="nav.home">Accueil</a>
+        <a href="tracking.html" class="navbar__link" data-i18n="nav.tracking">Suivi</a>
+        <a href="quote.html" class="navbar__link active" data-i18n="nav.quote">Devis</a>
+        <a href="portal.html" class="navbar__link" data-i18n="nav.portal">Portail</a>
+        
+        <a href="contact.html" class="navbar__link" data-i18n="nav.contact">Contact</a>
+      </div>
+
+      <div class="navbar__actions" id="navActions">
+        <div class="navbar__lang">
+          <button class="navbar__lang-btn active" data-lang="fr">FR</button>
+          <button class="navbar__lang-btn" data-lang="en">EN</button>
+          <button class="navbar__lang-btn" data-lang="zh">中文</button>
+        </div>
+        <a href="portal.html" class="btn btn--primary btn--sm" data-i18n="nav.cta">Espace Client</a>
+      </div>
+
+      <button class="navbar__toggle" id="navToggle" aria-label="Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       PAGE HEADER
+       ═══════════════════════════════════════════════════════════ -->
+  <header class="page-header page-header--quote">
+    <video class="page-header__video" autoplay muted loop playsinline>
+      <source src="video/0618.mp4" type="video/mp4">
+    </video>
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="index.html" data-i18n="nav.home">Accueil</a>
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        <span data-i18n="nav.quote">Devis</span>
+      </nav>
+      <h1 data-i18n="quote.title">Demande de <span class="text-gradient">Devis</span></h1>
+      <p data-i18n="quote.subtitle">Obtenez une estimation personnalisée en quelques minutes grâce à notre outil intelligent</p>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       MAIN CONTENT
+       ═══════════════════════════════════════════════════════════ -->
+  <main>
+    <section class="section" style="padding-top: var(--space-12);">
+      <div class="container">
+        <div class="quote-layout">
+
+          <!-- ─── WIZARD ─── -->
+          <div>
+            <div class="quote-wizard" id="quoteWizard">
+
+              <!-- Progress Bar -->
+              <div class="wizard-progress">
+                <div class="wizard-progress__step active">
+                  <div class="wizard-progress__circle">1</div>
+                  <span class="wizard-progress__label" data-i18n="quote.step1">Produit</span>
+                </div>
+                <div class="wizard-progress__line"></div>
+                <div class="wizard-progress__step">
+                  <div class="wizard-progress__circle">2</div>
+                  <span class="wizard-progress__label" data-i18n="quote.step2">Quantité</span>
+                </div>
+                <div class="wizard-progress__line"></div>
+                <div class="wizard-progress__step">
+                  <div class="wizard-progress__circle">3</div>
+                  <span class="wizard-progress__label" data-i18n="quote.step3">Destination</span>
+                </div>
+                <div class="wizard-progress__line"></div>
+                <div class="wizard-progress__step">
+                  <div class="wizard-progress__circle">4</div>
+                  <span class="wizard-progress__label" data-i18n="quote.step4">Transport</span>
+                </div>
+              </div>
+
+              <!-- Step Counter -->
+              <div class="wizard-step-counter" id="stepCounter">
+                Étape <strong>1</strong> / 4
+              </div>
+
+              <!-- ═══ STEP 1: Produit ═══ -->
+              <div class="wizard-panel active" id="step1">
+                <h2 class="wizard-panel__title" data-i18n="quote.s1.title">Décrivez votre produit</h2>
+                <p class="wizard-panel__subtitle" data-i18n="quote.s1.subtitle">Sélectionnez la catégorie et décrivez votre marchandise pour une estimation précise</p>
+
+                <div class="form-group">
+                  <label class="form-label" for="productType" data-i18n="quote.s1.type">Type de produit *</label>
+                  <select class="form-input form-select" id="productType" required>
+                    <option value="" data-i18n="quote.s1.placeholder">— Sélectionner une catégorie —</option>
+                    <option value="Électronique">Électronique</option>
+                    <option value="Textile">Textile</option>
+                    <option value="Machinerie">Machinerie</option>
+                    <option value="Matériaux de construction">Matériaux de construction</option>
+                    <option value="Produits alimentaires">Produits alimentaires</option>
+                    <option value="Cosmétiques">Cosmétiques</option>
+                    <option value="Pièces auto">Pièces auto</option>
+                    <option value="Mobilier">Mobilier</option>
+                    <option value="Autre">Autre</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="productDescription" data-i18n="quote.s1.desc">Description du produit</label>
+                  <textarea class="form-input form-textarea" id="productDescription" placeholder="Ex: 500 smartphones Android 6.5 pouces, avec accessoires (chargeur, écouteurs, coque)..." rows="4"></textarea>
+                  <div class="form-hint">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                    <span data-i18n="quote.s1.hint">Plus votre description est détaillée, plus l'estimation sera précise</span>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" data-i18n="quote.s1.tags">Catégories associées</label>
+                  <div class="category-tags">
+                    <button type="button" class="category-tag">Import Chine</button>
+                    <button type="button" class="category-tag">Sourcing usine</button>
+                    <button type="button" class="category-tag">Marque privée</button>
+                    <button type="button" class="category-tag">Échantillons</button>
+                    <button type="button" class="category-tag">Gros volume</button>
+                    <button type="button" class="category-tag">Première commande</button>
+                    <button type="button" class="category-tag">Revente</button>
+                    <button type="button" class="category-tag">Usage professionnel</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ═══ STEP 2: Quantité & Poids ═══ -->
+              <div class="wizard-panel" id="step2">
+                <h2 class="wizard-panel__title" data-i18n="quote.s2.title">Quantité & Poids</h2>
+                <p class="wizard-panel__subtitle" data-i18n="quote.s2.subtitle">Indiquez les dimensions de votre commande pour estimer les coûts logistiques</p>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label" for="quantity" data-i18n="quote.s2.qty">Quantité *</label>
+                    <input type="number" class="form-input" id="quantity" placeholder="Ex: 500" min="1" required>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" data-i18n="quote.s2.unit">Unité</label>
+                    <div class="unit-selector">
+                      <button type="button" class="unit-option selected" data-value="pièces">Pièces</button>
+                      <button type="button" class="unit-option" data-value="cartons">Cartons</button>
+                      <button type="button" class="unit-option" data-value="palettes">Palettes</button>
+                      <button type="button" class="unit-option" data-value="tonnes">Tonnes</button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label" for="weight" data-i18n="quote.s2.weight">Poids estimé (kg) *</label>
+                    <input type="number" class="form-input" id="weight" placeholder="Ex: 2500" min="0.1" step="0.1" required>
+                    <div class="form-hint">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                      <span data-i18n="quote.s2.weightHint">Poids brut total incluant l'emballage</span>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="volume" data-i18n="quote.s2.volume">Volume estimé (CBM)</label>
+                    <input type="number" class="form-input" id="volume" placeholder="Ex: 5.5" min="0.01" step="0.01">
+                    <div class="form-hint">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                      <span data-i18n="quote.s2.volumeHint">1 CBM = 1m × 1m × 1m</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" data-i18n="quote.s2.packaging">Type d'emballage</label>
+                  <div class="packaging-options">
+                    <button type="button" class="packaging-option selected" data-value="Standard">
+                      <div class="packaging-option__icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                      </div>
+                      <div class="packaging-option__name">Standard</div>
+                    </button>
+                    <button type="button" class="packaging-option" data-value="Renforcé">
+                      <div class="packaging-option__icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                      </div>
+                      <div class="packaging-option__name">Renforcé</div>
+                    </button>
+                    <button type="button" class="packaging-option" data-value="Fragile">
+                      <div class="packaging-option__icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                      </div>
+                      <div class="packaging-option__name">Fragile</div>
+                    </button>
+                    <button type="button" class="packaging-option" data-value="Dangereux">
+                      <div class="packaging-option__icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                      </div>
+                      <div class="packaging-option__name">Dangereux</div>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ═══ STEP 3: Destination ═══ -->
+              <div class="wizard-panel" id="step3">
+                <h2 class="wizard-panel__title" data-i18n="quote.s3.title">Destination</h2>
+                <p class="wizard-panel__subtitle" data-i18n="quote.s3.subtitle">Où souhaitez-vous recevoir votre marchandise ?</p>
+
+                <div class="form-group">
+                  <label class="form-label" data-i18n="quote.s3.country">Pays de destination *</label>
+                  <div class="country-grid">
+                    <button type="button" class="country-option" data-value="Congo-Brazzaville">
+                      <span class="country-option__flag">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>
+                      </span>
+                      <span class="country-option__name">Congo-Brazzaville</span>
+                    </button>
+                    <button type="button" class="country-option" data-value="RDC">
+                      <span class="country-option__flag">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>
+                      </span>
+                      <span class="country-option__name">RD Congo</span>
+                    </button>
+                    <button type="button" class="country-option" data-value="Cameroun">
+                      <span class="country-option__flag">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>
+                      </span>
+                      <span class="country-option__name">Cameroun</span>
+                    </button>
+                    <button type="button" class="country-option" data-value="Côte d'Ivoire">
+                      <span class="country-option__flag">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>
+                      </span>
+                      <span class="country-option__name">Côte d'Ivoire</span>
+                    </button>
+                    <button type="button" class="country-option" data-value="Sénégal">
+                      <span class="country-option__flag">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>
+                      </span>
+                      <span class="country-option__name">Sénégal</span>
+                    </button>
+                    <button type="button" class="country-option" data-value="France">
+                      <span class="country-option__flag">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>
+                      </span>
+                      <span class="country-option__name">France</span>
+                    </button>
+                    <button type="button" class="country-option" data-value="Belgique">
+                      <span class="country-option__flag">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>
+                      </span>
+                      <span class="country-option__name">Belgique</span>
+                    </button>
+                    <button type="button" class="country-option" data-value="Canada">
+                      <span class="country-option__flag">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>
+                      </span>
+                      <span class="country-option__name">Canada</span>
+                    </button>
+                    <button type="button" class="country-option" data-value="USA">
+                      <span class="country-option__flag">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>
+                      </span>
+                      <span class="country-option__name">États-Unis</span>
+                    </button>
+                    <button type="button" class="country-option" data-value="Autre">
+                      <span class="country-option__flag">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                      </span>
+                      <span class="country-option__name">Autre pays</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label" for="city" data-i18n="quote.s3.city">Ville</label>
+                    <input type="text" class="form-input" id="city" placeholder="Ex: Brazzaville, Pointe-Noire...">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label" for="address" data-i18n="quote.s3.address">Adresse de livraison (optionnel)</label>
+                    <input type="text" class="form-input" id="address" placeholder="Adresse complète...">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" data-i18n="quote.s3.incoterm">Incoterm</label>
+                  <div class="incoterm-selector">
+                    <button type="button" class="incoterm-option selected" data-value="FOB">
+                      <div class="incoterm-option__code">FOB</div>
+                      <div class="incoterm-option__desc">Franco à bord</div>
+                    </button>
+                    <button type="button" class="incoterm-option" data-value="CIF">
+                      <div class="incoterm-option__code">CIF</div>
+                      <div class="incoterm-option__desc">Coût, assurance & fret</div>
+                    </button>
+                    <button type="button" class="incoterm-option" data-value="DDP">
+                      <div class="incoterm-option__code">DDP</div>
+                      <div class="incoterm-option__desc">Rendu droits acquittés</div>
+                    </button>
+                    <button type="button" class="incoterm-option" data-value="EXW">
+                      <div class="incoterm-option__code">EXW</div>
+                      <div class="incoterm-option__desc">Départ usine</div>
+                    </button>
+                  </div>
+                  <div class="form-hint" style="margin-top: var(--space-3);">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                    <span data-i18n="quote.s3.incotermHint">FOB est recommandé pour la plupart des importations</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- ═══ STEP 4: Transport ═══ -->
+              <div class="wizard-panel" id="step4">
+                <h2 class="wizard-panel__title" data-i18n="quote.s4.title">Mode de Transport</h2>
+                <p class="wizard-panel__subtitle" data-i18n="quote.s4.subtitle">Choisissez le mode d'acheminement adapté à vos besoins</p>
+
+                <div class="transport-cards">
+                  <!-- Maritime -->
+                  <button type="button" class="transport-card" data-value="maritime">
+                    <span class="transport-card__icon" style="display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; margin-bottom: var(--space-2); color: var(--color-gold);">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 17 3 20h18l1-3H2Z"/><path d="M12 17V4l-6 3h6"/></svg>
+                    </span>
+                    <h3 class="transport-card__title">Fret Maritime</h3>
+                    <div class="transport-card__details">
+                      <div class="transport-card__detail">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        <span>25 — 45 jours</span>
+                      </div>
+                      <div class="transport-card__detail">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                        <span>Le plus économique</span>
+                      </div>
+                    </div>
+                    <span class="transport-card__badge">Recommandé</span>
+                  </button>
+
+                  <!-- Aérien -->
+                  <button type="button" class="transport-card" data-value="aerien">
+                    <span class="transport-card__icon" style="display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; margin-bottom: var(--space-2); color: var(--color-gold);">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3.5c-.5-.5-2.5 0-4 1.5L13.5 8.5 5.3 6.7c-.8-.2-1.6.2-2 1-.3.6-.1 1.4.4 1.9l7.7 5.3-3.2 3.2-3-.5c-.4-.1-.8.1-1.1.4l-.8.8c-.3.3-.3.7 0 1l2.5 2.5 2.5 2.5c.3.3.7.3 1 0l.8-.8c.3-.3.5-.7.4-1.1l-.5-3 3.2-3.2 5.3 7.7c.5.5 1.3.7 1.9.4.8-.4 1.2-1.2 1-2Z"/></svg>
+                    </span>
+                    <h3 class="transport-card__title">Fret Aérien</h3>
+                    <div class="transport-card__details">
+                      <div class="transport-card__detail">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        <span>5 — 10 jours</span>
+                      </div>
+                      <div class="transport-card__detail">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m13 2-2 2.5h3L12 7"/><path d="M10 14v-3"/><path d="M14 14v-3"/><path d="M11 19c-1.7 0-3-1.3-3-3v-2h8v2c0 1.7-1.3 3-3 3Z"/><path d="M12 22v-3"/></svg>
+                        <span>Le plus rapide</span>
+                      </div>
+                    </div>
+                    <span class="transport-card__badge">Express</span>
+                  </button>
+
+                  <!-- Mixte -->
+                  <button type="button" class="transport-card" data-value="mixte">
+                    <span class="transport-card__icon" style="display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; margin-bottom: var(--space-2); color: var(--color-gold);">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M16 3h5v5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 21H3v-5"/></svg>
+                    </span>
+                    <h3 class="transport-card__title">Mixte</h3>
+                    <div class="transport-card__details">
+                      <div class="transport-card__detail">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                        <span>15 — 25 jours</span>
+                      </div>
+                      <div class="transport-card__detail">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                        <span>Équilibré</span>
+                      </div>
+                    </div>
+                    <span class="transport-card__badge">Compromis</span>
+                  </button>
+                </div>
+
+                <!-- Toggle Options -->
+                <div class="toggle-options">
+                  <div class="toggle-option">
+                    <div class="toggle-option__info">
+                      <div class="toggle-option__icon" style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; color: var(--color-gold);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                      </div>
+                      <div>
+                        <div class="toggle-option__label" data-i18n="quote.s4.insurance">Assurance cargo</div>
+                        <div class="toggle-option__desc" data-i18n="quote.s4.insuranceDesc">Protection complète contre les dommages et pertes (+2%)</div>
+                      </div>
+                    </div>
+                    <div class="toggle-switch" data-field="insurance" role="switch" aria-label="Assurance cargo"></div>
+                  </div>
+                  <div class="toggle-option">
+                    <div class="toggle-option__info">
+                      <div class="toggle-option__icon" style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; color: var(--color-gold);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12h6"/><path d="M9 16h6"/></svg>
+                      </div>
+                      <div>
+                        <div class="toggle-option__label" data-i18n="quote.s4.customs">Assistance dédouanement</div>
+                        <div class="toggle-option__desc" data-i18n="quote.s4.customsDesc">Prise en charge complète des formalités douanières (+250$)</div>
+                      </div>
+                    </div>
+                    <div class="toggle-switch" data-field="customs" role="switch" aria-label="Assistance dédouanement"></div>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label" for="instructions" data-i18n="quote.s4.instructions">Instructions spéciales</label>
+                  <textarea class="form-input form-textarea" id="instructions" placeholder="Ex: Livraison urgente, marchandise fragile, horaires de réception particuliers..." rows="3"></textarea>
+                </div>
+              </div>
+
+              <!-- ═══ Navigation Buttons ═══ -->
+              <div class="wizard-nav">
+                <button type="button" class="btn btn--outline" id="prevBtn" style="visibility: hidden;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+                  <span data-i18n="quote.prev">Précédent</span>
+                </button>
+                <button type="button" class="btn btn--primary btn--lg" id="nextBtn">
+                  <span data-i18n="quote.next">Suivant</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                </button>
+              </div>
+
+            </div>
+
+            <!-- ═══ RESULTS PANEL ═══ -->
+            <div class="quote-results" id="quoteResults">
+              <div class="results-card">
+                <div class="results-card__header">
+                  <div class="results-card__icon" style="display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; color: var(--color-gold);">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="16"/><path d="M16 8H12.5a2.5 2.5 0 0 0 0 5h3a2.5 2.5 0 0 1 0 5H12"/></svg>
+                  </div>
+                  <h2 class="results-card__title" data-i18n="quote.results.title">Votre Estimation</h2>
+                  <p class="results-card__subtitle" data-i18n="quote.results.subtitle">Basée sur les informations fournies</p>
+                </div>
+
+                <div class="results-grid">
+                  <div class="result-item">
+                    <span class="result-item__icon" style="display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; color: var(--color-gold);">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="16"/><path d="M16 8H12.5a2.5 2.5 0 0 0 0 5h3a2.5 2.5 0 0 1 0 5H12"/></svg>
+                    </span>
+                    <div class="result-item__label" data-i18n="quote.results.cost">Coût estimé</div>
+                    <div class="result-item__value" id="resultCost">— $</div>
+                  </div>
+                  <div class="result-item">
+                    <span class="result-item__icon" style="display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; color: var(--color-gold);">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+                    </span>
+                    <div class="result-item__label" data-i18n="quote.results.delay">Délai estimé</div>
+                    <div class="result-item__value result-item__value--small" id="resultDelay">— jours</div>
+                  </div>
+                  <div class="result-item">
+                    <span class="result-item__icon" style="display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; color: var(--color-gold);">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                    </span>
+                    <div class="result-item__label" data-i18n="quote.results.container">Conteneur</div>
+                    <div class="result-item__value result-item__value--small" id="containerName">—</div>
+                  </div>
+                </div>
+
+                <div class="results-container">
+                  <div class="results-container__icon" style="display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; color: var(--color-gold);">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                  </div>
+                  <div class="results-container__info">
+                    <h4 data-i18n="quote.results.containerTitle">Conteneur recommandé</h4>
+                    <p id="containerDesc">—</p>
+                  </div>
+                </div>
+
+                <div class="results-tips">
+                  <div class="results-tips__title">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
+                    <span data-i18n="quote.results.tipsTitle">Conseils personnalisés</span>
+                  </div>
+                  <ul class="results-tips__list" id="resultTips"></ul>
+                </div>
+
+                <div class="results-disclaimer" data-i18n="quote.results.disclaimer" style="display: flex; gap: 8px; align-items: flex-start;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink: 0; margin-top: 2px;"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                  <span>Cette estimation est fournie à titre indicatif. Le prix final dépend des conditions du marché, du poids volumétrique réel et des frais portuaires. Un conseiller GZ-EMPIRE vous contactera pour un devis définitif.</span>
+                </div>
+
+                <div class="results-ctas">
+                  <button type="button" class="btn btn--primary btn--lg" id="confirmBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                    <span data-i18n="quote.results.confirm">Confirmer et envoyer</span>
+                  </button>
+                  <button type="button" class="btn btn--secondary" id="modifyBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/></svg>
+                    <span data-i18n="quote.results.modify">Modifier ma demande</span>
+                  </button>
+                  <button type="button" class="btn btn--whatsapp" id="whatsappBtn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                    <span data-i18n="quote.results.whatsapp">Partager via WhatsApp</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ─── SIDEBAR (Desktop) ─── -->
+          <aside class="quote-sidebar">
+
+            <!-- Contact Card -->
+            <div class="sidebar-card reveal">
+              <h3 class="sidebar-card__title">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                <span data-i18n="quote.sidebar.contact">Besoin d'aide ?</span>
+              </h3>
+              <div class="sidebar-contact">
+                <div class="sidebar-contact__item">
+                  <div class="sidebar-contact__icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  </div>
+                  <div class="sidebar-contact__text">
+                    <span>Chine</span>
+                    <strong><a href="tel:+8618320050031">+86 183 2005 0031</a></strong>
+                  </div>
+                </div>
+                <div class="sidebar-contact__item">
+                  <div class="sidebar-contact__icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  </div>
+                  <div class="sidebar-contact__text">
+                    <span>Congo</span>
+                    <strong><a href="tel:+243818247812">+243 818 247 812</a></strong>
+                  </div>
+                </div>
+                <div class="sidebar-contact__item">
+                  <div class="sidebar-contact__icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                  </div>
+                  <div class="sidebar-contact__text">
+                    <span>Email</span>
+                    <strong><a href="mailto:empire.bakala@gmail.com">empire.bakala@gmail.com</a></strong>
+                  </div>
+                </div>
+              </div>
+              <a href="https://wa.me/8618320050031" target="_blank" rel="noopener" class="sidebar-whatsapp">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                <span data-i18n="quote.sidebar.whatsapp">Écrire sur WhatsApp</span>
+              </a>
+            </div>
+
+            <!-- Working Hours Card -->
+            <div class="sidebar-card reveal delay-1">
+              <h3 class="sidebar-card__title">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span data-i18n="quote.sidebar.hours">Horaires</span>
+              </h3>
+              <div class="sidebar-hours">
+                <span class="sidebar-hours__badge">
+                  <span data-i18n="quote.sidebar.open">Disponible maintenant</span>
+                </span>
+                <div class="sidebar-hours__item">
+                  <span class="sidebar-hours__day" data-i18n="quote.sidebar.mf">Lun — Ven</span>
+                  <span class="sidebar-hours__time">09:00 — 18:00</span>
+                </div>
+                <div class="sidebar-hours__item">
+                  <span class="sidebar-hours__day" data-i18n="quote.sidebar.sat">Samedi</span>
+                  <span class="sidebar-hours__time">09:00 — 14:00</span>
+                </div>
+                <div class="sidebar-hours__item">
+                  <span class="sidebar-hours__day" data-i18n="quote.sidebar.sun">Dimanche</span>
+                  <span class="sidebar-hours__time" data-i18n="quote.sidebar.closed">Fermé</span>
+                </div>
+                <div class="form-hint" style="margin-top: var(--space-2);">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                  <span data-i18n="quote.sidebar.tz">Heure de Chine (UTC+8)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- FAQ Card -->
+            <div class="sidebar-card reveal delay-2">
+              <h3 class="sidebar-card__title">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+                <span data-i18n="quote.sidebar.faq">FAQ Rapide</span>
+              </h3>
+              <div class="faq-accordion">
+                <div class="faq-item">
+                  <button class="faq-item__question" type="button">
+                    <span data-i18n="quote.faq.q1">Quel est le montant minimum ?</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                  </button>
+                  <div class="faq-item__answer">
+                    <p data-i18n="quote.faq.a1">Il n'y a pas de montant minimum fixe. Nous traitons des commandes à partir de 500$ en valeur de marchandise. Pour les petits volumes, le groupage (LCL) est la solution la plus économique.</p>
+                  </div>
+                </div>
+                <div class="faq-item">
+                  <button class="faq-item__question" type="button">
+                    <span data-i18n="quote.faq.q2">Le devis est-il gratuit ?</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                  </button>
+                  <div class="faq-item__answer">
+                    <p data-i18n="quote.faq.a2">Oui, absolument. L'estimation en ligne et le devis détaillé envoyé par notre équipe sont totalement gratuits et sans engagement.</p>
+                  </div>
+                </div>
+                <div class="faq-item">
+                  <button class="faq-item__question" type="button">
+                    <span data-i18n="quote.faq.q3">Comment payer ?</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                  </button>
+                  <div class="faq-item__answer">
+                    <p data-i18n="quote.faq.a3">Nous acceptons les virements bancaires (T/T), Western Union, MoneyGram et les paiements via mobile money. Un acompte de 30% est demandé à la commande.</p>
+                  </div>
+                </div>
+                <div class="faq-item">
+                  <button class="faq-item__question" type="button">
+                    <span data-i18n="quote.faq.q4">Livrez-vous dans toute l'Afrique ?</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                  </button>
+                  <div class="faq-item__answer">
+                    <p data-i18n="quote.faq.a4">Oui, nous livrons dans toute l'Afrique, l'Europe et l'Amérique du Nord. Nos principaux corridors sont Chine → Afrique centrale et Chine → Afrique de l'Ouest.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </aside>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         CTA SECTION
+         ═══════════════════════════════════════════════════════════ -->
+    <section class="quote-cta-section">
+      <div class="container">
+        <div class="quote-cta-card reveal-scale">
+          <h2 data-i18n="quote.cta.title">Besoin d'un accompagnement <span class="text-gradient">personnalisé</span> ?</h2>
+          <p data-i18n="quote.cta.desc">Notre équipe d'experts est disponible pour analyser votre projet et vous proposer la solution la plus adaptée.</p>
+          <div class="btn-group">
+            <a href="contact.html" class="btn btn--primary btn--lg">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <span data-i18n="quote.cta.btn1">Nous contacter</span>
+            </a>
+            <a href="https://wa.me/8618320050031" target="_blank" rel="noopener" class="btn btn--secondary btn--lg">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              <span data-i18n="quote.cta.btn2">WhatsApp</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       SUCCESS MODAL
+       ═══════════════════════════════════════════════════════════ -->
+  <div class="success-overlay" id="successOverlay" onclick="if(event.target===this) closeSuccessModal()">
+    <div class="success-modal">
+      <div class="success-modal__icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+      </div>
+      <h3 data-i18n="quote.success.title">Demande envoyée !</h3>
+      <p data-i18n="quote.success.desc">Votre demande de devis a bien été enregistrée. Un conseiller GZ-EMPIRE vous contactera dans les prochaines 24 heures avec un devis détaillé et personnalisé.</p>
+      <button type="button" class="btn btn--primary btn--lg w-full" onclick="closeSuccessModal()" style="width:100%; justify-content:center;">
+        <span data-i18n="quote.success.btn">Compris, merci !</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+
+        <!-- Brand -->
+        <div class="footer__brand">
+          <div class="footer__brand-logo">
+            <img src="img/logo.png" alt="G.Z EMPIRE" class="logo-img" style="height: 48px;">
+          </div>
+          <p data-i18n="footer.desc">Votre partenaire de confiance pour le sourcing, l'import-export et la logistique entre la Chine et le monde entier.</p>
+          <div class="footer__social">
+            <a href="#" aria-label="Facebook">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+            <a href="#" aria-label="Instagram">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+            </a>
+            <a href="#" aria-label="LinkedIn">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+            <a href="https://wa.me/8618320050031" target="_blank" rel="noopener" aria-label="WhatsApp">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Services -->
+        <div>
+          <h4 class="footer__col-title" data-i18n="footer.services">Services</h4>
+          <ul class="footer__links">
+            <li><a href="#" data-i18n="footer.sourcing">Sourcing produits</a></li>
+            <li><a href="#" data-i18n="footer.quality">Contrôle qualité</a></li>
+            <li><a href="#" data-i18n="footer.logistics">Logistique</a></li>
+            <li><a href="#" data-i18n="footer.customs">Dédouanement</a></li>
+            <li><a href="quote.html" data-i18n="footer.quote">Devis gratuit</a></li>
+          </ul>
+        </div>
+
+        <!-- Company -->
+        <div>
+          <h4 class="footer__col-title" data-i18n="footer.company">Entreprise</h4>
+          <ul class="footer__links">
+            <li><a href="#" data-i18n="footer.about">À propos</a></li>
+            
+            <li><a href="contact.html" data-i18n="footer.contact">Contact</a></li>
+            <li><a href="#" data-i18n="footer.careers">Carrières</a></li>
+            <li><a href="#" data-i18n="footer.partners">Partenaires</a></li>
+          </ul>
+        </div>
+
+        <!-- Legal -->
+        <div>
+          <h4 class="footer__col-title" data-i18n="footer.legal">Légal</h4>
+          <ul class="footer__links">
+            <li><a href="#" data-i18n="footer.terms">Conditions générales</a></li>
+            <li><a href="#" data-i18n="footer.privacy">Politique de confidentialité</a></li>
+            <li><a href="#" data-i18n="footer.cookies">Cookies</a></li>
+            <li><a href="#" data-i18n="footer.cgv">CGV</a></li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="footer__bottom">
+        <span>© 2024 GZ-EMPIRE BAKALA TRADING CO., LTD. <span data-i18n="footer.rights">Tous droits réservés.</span></span>
+        <span data-i18n="footer.made" style="display: inline-flex; align-items: center; gap: 4px;">Fait avec <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #EF4444; fill: #EF4444;"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg> à Guangzhou, Chine</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/main.js"></script>
+  <script src="js/quote.js"></script>
+  <script src="js/assistant.js"></script>
+
+</body>
+</html>
