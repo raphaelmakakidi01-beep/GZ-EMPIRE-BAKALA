@@ -20,6 +20,29 @@
     };
   }
 
+  // ─── DATA MIGRATION v2.0 ───
+  // Purge all old fake demo data on first run of the new version
+  const DATA_VERSION = 'gz-empire-data-v2';
+  if (localStorage.getItem(DATA_VERSION) !== 'true') {
+    // Remove all old fake/demo data
+    const keysToClean = [
+      'gz-empire-prospects',
+      'gz-empire-shipments',
+      'gz-empire-chats',
+      'gz-empire-portal-notifications',
+      'gz-empire-user-logged',
+      'gz-empire-admin-logged'
+    ];
+    // Also remove any shipment status/photo overrides from old demo containers
+    ['GZEMP2024001', 'GZEMP2024002'].forEach(id => {
+      localStorage.removeItem(`gz-empire-shipment-status-${id}`);
+      localStorage.removeItem(`gz-empire-shipment-photo-${id}`);
+    });
+    keysToClean.forEach(key => localStorage.removeItem(key));
+    localStorage.setItem(DATA_VERSION, 'true');
+    console.info('✅ GZ-EMPIRE v2.0: Migration effectuée — données de démonstration supprimées.');
+  }
+
 document.addEventListener('DOMContentLoaded', () => {
 
   // ─── AUTHENTICATION CHECK ───
@@ -39,17 +62,70 @@ document.addEventListener('DOMContentLoaded', () => {
     console.error("Error checking login state on startup:", err);
   }
 
+  // ─── REAL AUTHENTICATION (SHA-256) ───
+  // Credentials: admin@gz-empire.com / GZEmpire2024!
+  const ADMIN_EMAIL = 'admin@gz-empire.com';
+  const ADMIN_PASS_HASH = 'fd95f85ff8436617edead5b77514814a25e173b8dbe311faa751ec8fd56f03b5';
+
+  async function hashPassword(password) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
   // Handle Login
   if (adminLoginForm) {
-    adminLoginForm.addEventListener('submit', (e) => {
+    adminLoginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      localStorage.setItem('gz-empire-admin-logged', 'true');
-      if (adminLoginView) adminLoginView.style.display = 'none';
-      if (adminDashboardView) adminDashboardView.classList.add('show');
+
+      const emailInput = document.getElementById('adminEmail');
+      const passwordInput = document.getElementById('adminPassword');
+      const errorDiv = document.getElementById('adminLoginError');
+      const loginBtn = document.getElementById('adminLoginBtn');
+
+      const enteredEmail = emailInput ? emailInput.value.trim().toLowerCase() : '';
+      const enteredPassword = passwordInput ? passwordInput.value : '';
+
+      // Show loading state
+      if (loginBtn) {
+        loginBtn.disabled = true;
+        loginBtn.style.opacity = '0.7';
+      }
+      if (errorDiv) errorDiv.style.display = 'none';
+
       try {
-        initializeDashboard();
+        const enteredHash = await hashPassword(enteredPassword);
+        const isValid = (enteredEmail === ADMIN_EMAIL && enteredHash === ADMIN_PASS_HASH);
+
+        if (isValid) {
+          localStorage.setItem('gz-empire-admin-logged', 'true');
+          if (adminLoginView) adminLoginView.style.display = 'none';
+          if (adminDashboardView) adminDashboardView.classList.add('show');
+          try {
+            initializeDashboard();
+          } catch (err) {
+            console.error('Error initializing dashboard after login:', err);
+          }
+        } else {
+          // Show error, shake effect
+          if (errorDiv) {
+            errorDiv.style.display = 'flex';
+          }
+          if (passwordInput) {
+            passwordInput.value = '';
+            passwordInput.style.borderColor = 'rgba(239,68,68,0.6)';
+            setTimeout(() => { passwordInput.style.borderColor = ''; }, 2000);
+          }
+        }
       } catch (err) {
-        console.error("Error initializing dashboard after login:", err);
+        console.error('Auth error:', err);
+      } finally {
+        if (loginBtn) {
+          loginBtn.disabled = false;
+          loginBtn.style.opacity = '';
+        }
       }
     });
   }
@@ -197,13 +273,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ─── CRM PROSPECTS DATA ───
-  const defaultProspects = [
-    { name: "Jean-Baptiste K.", email: "jb.k@gmail.com", phone: "+242 06 884 9928", country: "Congo-Brazzaville", product: "Électronique (Laptops)", budget: "$15,000", status: "qualifie", date: "10/05/2024" },
-    { name: "Amina Keita", email: "a.keita@yahoo.fr", phone: "+225 07 482 9918", country: "Côte d'Ivoire", product: "Textiles & Vêtements", budget: "$8,500", status: "nouveau", date: "11/05/2024" },
-    { name: "Pierre Claver", email: "p.claver@soneca.net", phone: "+237 699 47 18 29", country: "Cameroun", product: "Pièces de rechange auto", budget: "$22,000", status: "contacte", date: "12/05/2024" },
-    { name: "Sarah Deng", email: "sarah.d@gz-sourcing.cn", phone: "+86 138 2901 8847", country: "Chine (Sourcing)", product: "Accompagnement Foires VIP", budget: "$3,000", status: "converti", date: "13/05/2024" },
-    { name: "Koffi Yao", email: "yao.koffi@fret.ci", phone: "+225 01 0293 8849", country: "Sénégal", product: "Matériaux de Construction", budget: "$45,000", status: "perdu", date: "09/05/2024" }
-  ];
+  // Données réelles uniquement — les prospects sont ajoutés via les formulaires de contact
+  const defaultProspects = [];
 
   function loadProspectsData() {
     try {
@@ -367,10 +438,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ─── LOGISTICS EXPÉDITIONS DATA ───
-  const defaultShipments = [
-    { container: "GZEMP2024001", origin: "Guangzhou (Port)", destination: "Pointe-Noire (Port)", carrier: "COSCO Shipping", departure: "15/03/2024", eta: "28/04/2024", status: "transit", photo: "img/package_GZEMP2024001.png", update: "Il y a 2h" },
-    { container: "GZEMP2024002", origin: "Guangzhou (Port)", destination: "Abidjan (Port)", carrier: "Maersk Line", departure: "20/03/2024", eta: "05/05/2024", status: "production", photo: "img/package_GZEMP2024002.png", update: "Il y a 1 jour" }
-  ];
+  // Données réelles uniquement — les expéditions sont créées via le formulaire admin
+  const defaultShipments = [];
 
   let shipments = [];
 
@@ -932,32 +1001,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ─── CHATBOT HISTORY DATA ───
-  const defaultChats = [
-    {
-      visitor: "Jean-Philippe (Congo)",
-      time: "Il y a 10 min",
-      messages: [
-        { sender: "user", text: "Bonjour, je cherche un fournisseur de pièces détachées auto à Guangzhou. Pouvez-vous m'aider ?" },
-        { sender: "bot", text: "Bonjour ! Tout à fait. GZ-EMPIRE dispose de bureaux à Guangzhou. Quel type de pièces auto recherchez-vous et quel est votre budget estimé ?" }
-      ]
-    },
-    {
-      visitor: "Fatoumata D. (Mali)",
-      time: "Il y a 1h",
-      messages: [
-        { sender: "user", text: "Quels sont les délais pour un conteneur 40 pieds vers Abidjan ?" },
-        { sender: "bot", text: "Pour le fret maritime de Guangzhou à Abidjan, comptez environ 30 à 35 jours de mer. Notre prochain chargement est prévu pour le 15 juin." }
-      ]
-    },
-    {
-      visitor: "Claude M. (Bruxelles)",
-      time: "Il y a 3h",
-      messages: [
-        { sender: "user", text: "Comment fonctionne votre service de visa ?" },
-        { sender: "bot", text: "Nous fournissons la lettre d'invitation officielle (PU Letter) et gérons le dépôt de votre dossier pour un visa d'affaires (M) de 30 à 90 jours." }
-      ]
-    }
-  ];
+  // Historique réel des conversations — alimenté automatiquement par le chatbot
+  const defaultChats = [];
 
   function loadChatsData() {
     try {
@@ -1162,9 +1207,25 @@ document.addEventListener('DOMContentLoaded', () => {
   const actionSendNotify = document.getElementById('actionSendNotify');
   if (actionSendNotify) {
     actionSendNotify.addEventListener('click', () => {
-      const msg = prompt("Entrez le message d'alerte à envoyer aux clients :");
-      if (msg) {
-        alert(`Notification simulée envoyée avec succès aux clients par WhatsApp/Email :\n\n"${msg}"`);
+      const msg = prompt("Entrez le message d'alerte à envoyer aux clients (sera ajouté aux notifications portail) :");
+      if (msg && msg.trim()) {
+        try {
+          let notifs = JSON.parse(localStorage.getItem('gz-empire-portal-notifications') || '[]');
+          const newNotif = {
+            id: Date.now(),
+            ref: 'GÉNÉRAL',
+            message: msg.trim(),
+            time: "À l'instant",
+            type: 'ship',
+            read: false
+          };
+          notifs.unshift(newNotif);
+          if (notifs.length > 20) notifs = notifs.slice(0, 20);
+          localStorage.setItem('gz-empire-portal-notifications', JSON.stringify(notifs));
+          alert(`✅ Notification ajoutée avec succès au portail client.\n\nPour l'envoi WhatsApp/Email, contactez votre équipe via : +86 183 2005 0031`);
+        } catch (err) {
+          console.error('Error saving notification:', err);
+        }
       }
     });
   }
@@ -1172,7 +1233,41 @@ document.addEventListener('DOMContentLoaded', () => {
   const actionExportData = document.getElementById('actionExportData');
   if (actionExportData) {
     actionExportData.addEventListener('click', () => {
-      alert("Fichier 'gz_leads_export.xlsx' généré avec succès ! Le téléchargement va commencer (simulation).");
+      try {
+        // Real CSV export
+        let storedProspects = [];
+        try {
+          storedProspects = JSON.parse(localStorage.getItem('gz-empire-prospects') || '[]');
+        } catch (e) {}
+        
+        if (storedProspects.length === 0) {
+          alert('Aucun prospect à exporter. Le CRM est vide.');
+          return;
+        }
+
+        const headers = ['Nom', 'Email', 'Téléphone', 'Pays', 'Produit', 'Budget', 'Statut', 'Date'];
+        const rows = storedProspects.map(p => [
+          p.name || '', p.email || '', p.phone || '', p.country || '',
+          p.product || '', p.budget || '', p.status || '', p.date || ''
+        ]);
+
+        const csvContent = [headers, ...rows]
+          .map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+          .join('\n');
+
+        const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `gz_leads_export_${new Date().toLocaleDateString('fr-FR').replace(/\//g, '-')}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      } catch (err) {
+        console.error('Export error:', err);
+        alert('Erreur lors de la génération du fichier CSV.');
+      }
     });
   }
 

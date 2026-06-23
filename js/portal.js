@@ -20,6 +20,19 @@
     };
   }
 
+  // ─── DATA MIGRATION v2.0 ───
+  const DATA_VERSION = 'gz-empire-data-v2';
+  if (localStorage.getItem(DATA_VERSION) !== 'true') {
+    ['gz-empire-prospects','gz-empire-shipments','gz-empire-chats',
+     'gz-empire-portal-notifications','gz-empire-user-logged','gz-empire-admin-logged'
+    ].forEach(key => localStorage.removeItem(key));
+    ['GZEMP2024001', 'GZEMP2024002'].forEach(id => {
+      localStorage.removeItem(`gz-empire-shipment-status-${id}`);
+      localStorage.removeItem(`gz-empire-shipment-photo-${id}`);
+    });
+    localStorage.setItem(DATA_VERSION, 'true');
+  }
+
 document.addEventListener('DOMContentLoaded', () => {
 
   // ─── LOGIN STATE & SWITCH VIEW ───
@@ -36,24 +49,52 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Handle Login Form Submission
+  // Auth: email (any valid format) + numéro de conteneur existant
   if (loginForm) {
     loginForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      
+
+      const emailInput = document.getElementById('loginEmail');
+      const passwordInput = document.getElementById('loginPassword');
       const submitBtn = document.getElementById('loginBtn');
-      if (submitBtn) {
-        submitBtn.classList.add('loading');
-      }
+      const errorEl = document.getElementById('portalLoginError');
+
+      const enteredEmail = emailInput ? emailInput.value.trim().toLowerCase() : '';
+      const enteredCode = passwordInput ? passwordInput.value.trim().toUpperCase() : '';
+
+      if (!enteredEmail || !enteredCode) return;
+
+      if (submitBtn) submitBtn.classList.add('loading');
+      if (errorEl) errorEl.style.display = 'none';
 
       setTimeout(() => {
-        if (submitBtn) {
-          submitBtn.classList.remove('loading');
+        if (submitBtn) submitBtn.classList.remove('loading');
+
+        // Validate: the code must match an existing container number in the system
+        let storedShipments = [];
+        try {
+          storedShipments = JSON.parse(localStorage.getItem('gz-empire-shipments') || '[]');
+        } catch (e) {}
+
+        const validContainer = storedShipments.some(s => s && s.container && s.container.toUpperCase() === enteredCode);
+
+        if (validContainer) {
+          // Save login state with the container ref
+          localStorage.setItem('gz-empire-user-logged', 'true');
+          localStorage.setItem('gz-empire-user-email', enteredEmail);
+          localStorage.setItem('gz-empire-user-container', enteredCode);
+          if (loginView) loginView.classList.add('hidden');
+          if (dashboardView) dashboardView.classList.remove('hidden');
+          initializeDashboard();
+        } else {
+          // Invalid credentials
+          if (errorEl) errorEl.style.display = 'flex';
+          if (passwordInput) {
+            passwordInput.style.borderColor = 'rgba(239,68,68,0.6)';
+            setTimeout(() => { passwordInput.style.borderColor = ''; }, 2000);
+          }
         }
-        localStorage.setItem('gz-empire-user-logged', 'true');
-        loginView.classList.add('hidden');
-        dashboardView.classList.remove('hidden');
-        initializeDashboard();
-      }, 1200);
+      }, 900);
     });
   }
 
@@ -62,36 +103,18 @@ document.addEventListener('DOMContentLoaded', () => {
     logoutBtn.addEventListener('click', (e) => {
       e.preventDefault();
       localStorage.removeItem('gz-empire-user-logged');
-      dashboardView.classList.add('hidden');
-      loginView.classList.remove('hidden');
+      localStorage.removeItem('gz-empire-user-email');
+      localStorage.removeItem('gz-empire-user-container');
+      if (dashboardView) dashboardView.classList.add('hidden');
+      if (loginView) loginView.classList.remove('hidden');
     });
   }
 
-  // Social Login mock clicks
+  // Social login buttons are removed (no longer mock logins)
   const googleLogin = document.getElementById('googleLogin');
   const phoneLogin = document.getElementById('phoneLogin');
-  if (googleLogin) {
-    googleLogin.addEventListener('click', () => {
-      localStorage.setItem('gz-empire-user-logged', 'true');
-      loginView.classList.add('hidden');
-      dashboardView.classList.remove('hidden');
-      initializeDashboard();
-    });
-  }
-  if (phoneLogin) {
-    phoneLogin.addEventListener('click', () => {
-      const phone = prompt("Entrez votre numéro de téléphone :");
-      if (phone) {
-        const code = prompt("Entrez le code OTP reçu par SMS (4 chiffres) :");
-        if (code) {
-          localStorage.setItem('gz-empire-user-logged', 'true');
-          loginView.classList.add('hidden');
-          dashboardView.classList.remove('hidden');
-          initializeDashboard();
-        }
-      }
-    });
-  }
+  if (googleLogin) googleLogin.style.display = 'none';
+  if (phoneLogin) phoneLogin.style.display = 'none';
 
   // Password Visibility Toggle
   const passwordToggle = document.getElementById('passwordToggle');
@@ -228,10 +251,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ─── LOGISTICS EXPÉDITIONS DATA ───
-  const defaultShipments = [
-    { container: "GZEMP2024001", origin: "Guangzhou, Chine", destination: "Pointe-Noire, Congo", carrier: "COSCO Shipping", departure: "10 Juin 2026", eta: "28 Juin 2026", status: "transit", photo: "img/package_GZEMP2024001.png", update: "Il y a 2h" },
-    { container: "GZEMP2024002", origin: "Foshan, Chine", destination: "Abidjan, Côte d'Ivoire", carrier: "Maersk Line", departure: "12 Juin 2026", eta: "19 Juin 2026", status: "production", photo: "img/package_GZEMP2024002.png", update: "Il y a 1 jour" }
-  ];
+  // Données réelles — alimentées depuis l'admin panel
+  const defaultShipments = [];
 
   function renderShipmentsQuickList() {
     try {
@@ -654,11 +675,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const notificationsDropdownList = document.getElementById('notificationsDropdownList');
   const markAllRead = document.getElementById('markAllRead');
 
-  const defaultNotifications = [
-    { id: 1, ref: 'GZEMP2024001', message: 'Le conteneur GZEMP2024001 est en transit maritime.', time: 'Il y a 10 min', type: 'ship', read: false },
-    { id: 2, ref: 'GZEMP2024002', message: 'Photos de contrôle qualité prêtes pour le colis GZEMP2024002.', time: 'Il y a 2 heures', type: 'quality', read: false },
-    { id: 3, ref: 'GZEMP2024001', message: 'Facture INV-2024-001 émise pour votre expédition.', time: 'Hier', type: 'invoice', read: false }
-  ];
+  // ─── NOTIFICATIONS ───
+  // Notifications réelles uniquement — générées par l'admin
+  const defaultNotifications = [];
 
   function renderDropdownNotifications() {
     if (!notificationsDropdownList) return;
