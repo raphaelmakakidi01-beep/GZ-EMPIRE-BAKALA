@@ -177,6 +177,8 @@ const translations = {
     "contact.map.subtitle": "Situés au cœur commercial de la Chine pour assurer un sourcing optimal.",
     "contact.faq.title": "Questions Fréquentes",
     "contact.faq.subtitle": "Voici les réponses aux questions les plus couramment posées.",
+    "contact.faq.q4": "Quels pays desservez-vous pour l'import-export ?",
+    "contact.faq.a4": "GZ-EMPIRE (EMPIRE BAKALA) opère principalement depuis la Chine vers l'Afrique Centrale, de l'Est et de l'Ouest, notamment en Côte d'Ivoire, en République Démocratique du Congo (Kinshasa, Lubumbashi, Matadi), au Congo-Brazzaville, à Dar es Salam (Tanzanie), ainsi qu'au Cameroun et au Sénégal. Nous desservons également l'Europe (France, Belgique) et l'Amérique du Nord (USA, Canada). Notre réseau logistique s'adapte à de multiples destinations internationales.",
     
     // Footer
     "footer.description": "Votre partenaire de confiance pour l'import-export entre la Chine et le monde. Solutions de sourcing, logistique et commerce international.",
@@ -424,8 +426,9 @@ const translations = {
     "contact.map.subtitle": "Located at the commercial heart of China to ensure optimal sourcing.",
     "contact.faq.title": "Frequently Asked Questions",
     "contact.faq.subtitle": "Here are the answers to the most commonly asked questions.",
-
-    // Footer
+    "contact.faq.q4": "Which countries do you serve for import-export?",
+    "contact.faq.a4": "GZ-EMPIRE (EMPIRE BAKALA) operates mainly from China to Central, East, and West Africa, specifically in Ivory Coast, the Democratic Republic of Congo (Kinshasa, Lubumbashi, Matadi), Congo-Brazzaville, Dar es Salaam (Tanzania), as well as Cameroon and Senegal. We also serve Europe (France, Belgium) and North America (USA, Canada). Our logistics network adapts to multiple international destinations.",
+      // Footer
     "footer.description": "Your trusted partner for import-export between China and the world. Sourcing, logistics, and international trade solutions.",
     "footer.services": "Services",
     "footer.sourcing": "China Sourcing",
@@ -671,6 +674,8 @@ const translations = {
     "contact.map.subtitle": "地处中国南方的贸易核心地带，确保高水平的本地化采购与快捷物流。",
     "contact.faq.title": "常见问题解答 (FAQ)",
     "contact.faq.subtitle": "以下是我们的客户最常咨询的物流与代购问题解答。",
+    "contact.faq.q4": "您的进出口业务覆盖哪些国家和地区？",
+    "contact.faq.a4": "帝王世家贸易（EMPIRE BAKALA）主要运营从中国发往中非、东非和西非的物流业务，特别是科特迪瓦、刚果民主共和国（金沙萨、卢本巴希、马塔迪）、刚果布拉柴维尔、坦桑尼亚达累斯萨拉姆，以及喀麦隆和塞内加尔。我们也服务欧洲（法国、比利时）和北美地区（美国、加拿大），我们的物流网络可灵活对接全球多个国际目的地。",
 
     // Footer
     "footer.description": "您在中非及全球贸易中值得信赖的伙伴。提供专业的代购、清关、海空运物流一站式服务。",

@@ -242,6 +242,9 @@ document.addEventListener('DOMContentLoaded', () => {
       { lat: -4.27, lng: 15.28, name: 'Brazzaville' },    // Congo
       { lat: -4.78, lng: 11.87, name: 'Pointe-Noire' },   // Congo
       { lat: -4.32, lng: 15.31, name: 'Kinshasa' },       // RDC
+      { lat: -11.66, lng: 27.48, name: 'Lubumbashi' },    // RDC
+      { lat: -5.82, lng: 13.45, name: 'Matadi' },         // RDC
+      { lat: -6.79, lng: 39.27, name: 'Dar es Salaam' },  // Tanzanie
       { lat: 14.69, lng: -17.44, name: 'Dakar' },         // Sénégal
       { lat: 5.36, lng: -4.01, name: 'Abidjan' },         // Côte d'Ivoire
       { lat: 4.05, lng: 9.77, name: 'Douala' },           // Cameroun
