@@ -22,13 +22,19 @@
 }
 
 /* ─── Login View ─── */
+/* ─── LOGIN VIEW — Full screen, isolated ─── */
 .login-view {
-  min-height: 100vh;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
   display: flex;
   flex-direction: column;
-  background: var(--navy-900);
-  position: relative;
-  overflow: hidden;
+  background: #060d1f;
+  overflow-y: auto;
+}
+
+.login-view.hidden {
+  display: none;
 }
 
 .login-bg-particles {
@@ -1362,8 +1368,53 @@
   }
 }
 
-/* ─── Fix Login Card overlapping with Navbar ─── */
+/* ─── Fix Login Card positioning ─── */
 .login-page {
-  padding-top: 140px !important;
-  padding-bottom: var(--space-12) !important;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8) var(--space-6);
+  position: relative;
+  z-index: 2;
 }
+
+
+.login-card {
+  width: 100%;
+  max-width: 460px;
+  background: var(--white);
+  border-radius: 24px;
+  padding: var(--space-10) var(--space-8);
+  box-shadow:
+    0 32px 80px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(212, 175, 55, 0.12),
+    inset 0 1px 0 rgba(255,255,255,0.9);
+  position: relative;
+  z-index: 3;
+  animation: loginCardIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes loginCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Background gradient overlay for login page */
+.login-view::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 80% 90%, rgba(7, 26, 82, 0.6) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 1;
+}
+
