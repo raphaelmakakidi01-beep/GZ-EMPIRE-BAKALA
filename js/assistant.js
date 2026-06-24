@@ -294,50 +294,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   sendBtn.addEventListener('click', handleUserSend);
 
-  // Lead qualification status variables
-  let currentStep = 'name';
-  let leadData = {
-    name: '',
-    product: '',
-    country: '',
-    budget: '',
-    email: '',
-    phone: '',
-    status: 'qualifie',
-    date: ''
-  };
-
-  const dialogFlow = {
-    welcome: "Bonjour ! Bienvenue chez GZ-EMPIRE. Je suis ravi de vous assister dans vos projets d'importation de la Chine vers le monde. Pour cibler au mieux vos besoins en moins d'une minute, comment puis-je vous appeler ?",
-    product: "Enchanté {name} ! Quel type de marchandise ou de produit souhaitez-vous sourcer ou importer ?",
-    country: "Parfait. Dans quel pays ou ville de destination devons-nous acheminer vos marchandises ?",
-    budget: "C'est noté. Pour mieux estimer les solutions logistiques, quelle est la quantité approximative ou le budget prévu pour cette commande ?",
-    email: "Merci pour ces précisions. Quelle est votre adresse email pour recevoir nos offres de fournisseurs et vos estimations de coûts ?",
-    phone: "Et enfin, quel est votre numéro de téléphone (WhatsApp de préférence) pour un échange plus direct avec nos équipes ?",
-    success: "Parfait, c'est tout bon ! Merci infiniment {name}. Vos critères de sourcing ont été transmis à notre équipe logistique à Guangzhou. Nous étudions votre projet et revenons vers vous sous 24 heures ouvrées."
-  };
-
-  function startConversation() {
-    // Restore session storage history if it exists
-    const storedHistory = sessionStorage.getItem('gz-empire-assistant-history');
-    const storedStep = sessionStorage.getItem('gz-empire-assistant-step');
-    const storedLead = sessionStorage.getItem('gz-empire-assistant-lead');
-
-    if (storedHistory && storedStep && storedLead) {
-      try {
-        bodyEl.innerHTML = storedHistory;
-        currentStep = storedStep;
-        leadData = JSON.parse(storedLead);
-        scrollChatBottom();
-        return;
-      } catch (err) {
-        console.error("Error restoring assistant session:", err);
-      }
-    }
-    
-    appendBotMessage(dialogFlow.welcome);
-  }
-
   function handleUserSend() {
     const text = inputEl.value.trim();
     if (!text) return;
@@ -379,80 +335,172 @@ document.addEventListener('DOMContentLoaded', () => {
     sessionStorage.setItem('gz-empire-assistant-lead', JSON.stringify(leadData));
   }
 
-  // Lead qualification state machine
-  function processStepInput(text) {
-    // Check if user asks general question first (interrupting the flow)
-    const lower = text.toLowerCase();
-    if (lower.includes('prix') || lower.includes('devis') || lower.includes('tarif') || lower.includes('combien')) {
-      appendBotMessage("Pour obtenir un prix ou un devis précis, je vous recommande de terminer ces questions rapides de qualification, ou d'utiliser notre page <a href='quote.html'>Demande de Devis</a>.");
-      // Reprompt the current step question
-      setTimeout(() => {
-        repromptCurrentStep();
-      }, 1000);
-      return;
-    }
-    
-    if (lower.includes('contact') || lower.includes('adresse') || lower.includes('telephone') || lower.includes('bureau')) {
-      appendBotMessage("Nos bureaux sont à Guangzhou, en Chine. Nos contacts directs sont +86 183 2005 0031 (Chine) ou +243 818 247 812 (Congo).");
-      setTimeout(() => {
-        repromptCurrentStep();
-      }, 1000);
-      return;
+  // Lead qualification status variables
+  let currentStep = 'name';
+  let leadData = {
+    name: '',
+    product: '',
+    country: '',
+    budget: '',
+    email: '',
+    phone: '',
+    status: 'qualifie',
+    date: ''
+  };
+
+  const dialogFlow = {
+    welcome: "Bonjour et bienvenue chez GZ-EMPIRE ! 👋 Je suis votre assistant virtuel intelligent. Je suis là pour vous aider dans vos projets de sourcing et de logistique depuis la Chine. Pour que nous puissions cibler vos besoins au mieux en moins d'une minute, comment puis-je vous appeler ?"
+  };
+
+  function startConversation() {
+    // Restore session storage history if it exists
+    const storedHistory = sessionStorage.getItem('gz-empire-assistant-history');
+    const storedStep = sessionStorage.getItem('gz-empire-assistant-step');
+    const storedLead = sessionStorage.getItem('gz-empire-assistant-lead');
+
+    if (storedHistory && storedStep && storedLead) {
+      try {
+        bodyEl.innerHTML = storedHistory;
+        currentStep = storedStep;
+        leadData = JSON.parse(storedLead);
+        scrollChatBottom();
+        return;
+      } catch (e) {}
     }
 
-    if (lower.includes('delai') || lower.includes('temps') || lower.includes('jour')) {
-      appendBotMessage("Les délais de livraison maritime sont de 25 à 45 jours. En fret aérien express, les délais sont de 5 à 10 jours ouvrés.");
+    // Default start
+    appendBotMessage(dialogFlow.welcome);
+  }
+
+  function getStepTransitionMessage(step, text) {
+    switch (step) {
+      case 'name':
+        const name = text.trim();
+        leadData.name = name;
+        return `Enchanté <strong>${name}</strong> ! 😊 C'est un réel plaisir de faire votre connaissance. Dites-moi, quel type de produit ou de marchandise souhaitez-vous sourcer ou importer depuis la Chine ?`;
+
+      case 'product':
+        const product = text.trim();
+        leadData.product = product;
+        return `C'est bien noté ! Les projets de sourcing pour <strong>${product}</strong> sont très intéressants. Nous avons justement un réseau de plus de 500 usines partenaires qualifiées à Guangzhou et dans toute la Chine. Pour organiser le transport, dans quel pays ou quelle ville de destination devons-nous expédier vos marchandises ?`;
+
+      case 'country':
+        const country = text.trim();
+        leadData.country = country;
+        return `Super, <strong>${country}</strong> ! C'est une liaison maritime et aérienne que nous desservons régulièrement (nous livrons en Côte d'Ivoire, RDC, Congo-Brazzaville, etc.). Pour que nous puissions évaluer s'il vous faut un conteneur complet (FCL) ou du groupage (LCL), quelle est la quantité approximative ou le budget prévu pour cette commande ?`;
+
+      case 'budget':
+        const budget = text.trim();
+        leadData.budget = budget;
+        return `C'est très clair. Nous adapterons nos offres de sourcing et nos cotations en fonction. Pour que nos agents logistiques puissent vous envoyer les fiches de prix fournisseurs et vos estimations de transport, à quelle adresse email puis-je vous écrire ?`;
+
+      case 'email':
+        const email = text.trim();
+        leadData.email = email;
+        return `Parfait, j'ai bien noté l'adresse <em>${email}</em>. Et pour finir, quel est votre numéro de téléphone (WhatsApp de préférence, avec l'indicatif pays comme +243... ou +225...) ? C'est beaucoup plus pratique pour vous envoyer des photos d'inspections d'usines en direct.`;
+    }
+  }
+
+  function getGeneralReply(lower) {
+    if (lower.includes('prix') || lower.includes('devis') || lower.includes('tarif') || lower.includes('combien') || lower.includes('cout') || lower.includes('coût')) {
+      return "Pour vous donner une estimation précise des prix de sourcing ou des tarifs de transport, nous devons d'abord comprendre votre besoin (volume, type de produit, destination). Notre recherche de fournisseurs est gratuite si nous gérons la logistique ! Pour avancer et obtenir votre devis personnalisé, poursuivons nos questions rapides.";
+    }
+    
+    if (lower.includes('contact') || lower.includes('adresse') || lower.includes('telephone') || lower.includes('téléphone') || lower.includes('bureau') || lower.includes('joindre')) {
+      return "Nous sommes physiquement basés à Guangzhou, en Chine, au plus près des usines. Nous avons aussi des correspondants à Kinshasa et Brazzaville. Vous pouvez nous joindre par WhatsApp au <strong>+86 183 2005 0031</strong> ou par téléphone au <strong>+243 818 247 812</strong>. Mais dites-moi, reprenons notre échange pour votre projet.";
+    }
+
+    if (lower.includes('delai') || lower.includes('délai') || lower.includes('temps') || lower.includes('durée') || lower.includes('duree') || lower.includes('arrive')) {
+      return "Pour le transport maritime depuis la Chine vers l'Afrique (Congo, Côte d'Ivoire, RDC...), comptez généralement entre 30 et 45 jours. Par fret aérien express, les délais sont ultra-rapides : entre 5 et 10 jours ouvrés de porte à porte ! Mais dites-moi en plus sur vos besoins.";
+    }
+
+    if (lower.includes('humain') || lower.includes('robot') || lower.includes('qui es-tu') || lower.includes('qui es tu') || lower.includes('conseiller')) {
+      return "Je suis l'assistant intelligent de G.Z EMPIRE ! Je qualifie votre besoin pour le transmettre à nos agents à Guangzhou, qui sont de vrais professionnels du sourcing et de la logistique. Ne vous inquiétez pas, un conseiller humain prendra le relais par email ou WhatsApp d'ici quelques heures ! Poursuivons ensemble.";
+    }
+    
+    return null;
+  }
+
+  // Lead qualification state machine
+  function processStepInput(text) {
+    const lower = text.toLowerCase();
+    
+    // Check for general questions interrupting the flow
+    const generalReply = getGeneralReply(lower);
+    if (generalReply) {
+      appendBotMessage(generalReply);
       setTimeout(() => {
         repromptCurrentStep();
-      }, 1000);
+      }, 2500);
       return;
     }
 
     // Process steps
     switch (currentStep) {
       case 'name':
-        leadData.name = text;
+        if (text.length < 2) {
+          appendBotMessage("Pourriez-vous me donner un nom ou prénom valide s'il vous plaît ? 😊");
+          return;
+        }
+        appendBotMessage(getStepTransitionMessage('name', text));
         currentStep = 'product';
-        appendBotMessage(dialogFlow.product.replace('{name}', leadData.name));
         break;
 
       case 'product':
-        leadData.product = text;
+        if (text.length < 3) {
+          appendBotMessage("N'hésitez pas à détailler un peu plus le type de produit ou marchandise que vous recherchez (ex: vêtements de sport, panneaux solaires, téléphones...).");
+          return;
+        }
+        appendBotMessage(getStepTransitionMessage('product', text));
         currentStep = 'country';
-        appendBotMessage(dialogFlow.country);
         break;
 
       case 'country':
-        leadData.country = text;
+        if (text.length < 2) {
+          appendBotMessage("Indiquez-moi simplement le pays ou la ville où nous devons acheminer vos marchandises (ex: Abidjan, Kinshasa, Pointe-Noire...).");
+          return;
+        }
+        appendBotMessage(getStepTransitionMessage('country', text));
         currentStep = 'budget';
-        appendBotMessage(dialogFlow.budget);
         break;
 
       case 'budget':
-        leadData.budget = text;
+        if (text.length < 1) {
+          appendBotMessage("Donnez-moi une idée même approximative de la quantité ou de l'enveloppe budgétaire prévue.");
+          return;
+        }
+        appendBotMessage(getStepTransitionMessage('budget', text));
         currentStep = 'email';
-        appendBotMessage(dialogFlow.email);
         break;
 
       case 'email':
-        leadData.email = text;
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(text)) {
+          appendBotMessage("Oups ! L'adresse email saisie ne me semble pas valide. Pouvez-vous la réécrire (ex: client@domaine.com) ?");
+          return;
+        }
+        appendBotMessage(getStepTransitionMessage('email', text));
         currentStep = 'phone';
-        appendBotMessage(dialogFlow.phone);
         break;
 
       case 'phone':
+        const digits = text.replace(/[^0-9]/g, '');
+        if (digits.length < 6) {
+          appendBotMessage("Ce numéro me semble trop court. N'oubliez pas d'inclure l'indicatif pays (ex: +243... ou +225...) pour que nos équipes puissent vous appeler sur WhatsApp.");
+          return;
+        }
         leadData.phone = text;
         leadData.date = new Date().toLocaleDateString('fr-FR');
         currentStep = 'success';
         
-        // Qualification success! Save to prospects database
         saveLeadToCRM();
         
-        appendBotMessage(dialogFlow.success.replace('{name}', leadData.name));
+        const successMsg = `Tout est parfait, <strong>${leadData.name}</strong> ! Merci beaucoup. 🙏 Vos critères de sourcing pour vos <strong>${leadData.product}</strong> vers <strong>${leadData.country}</strong> ont été transmis en direct à nos agents de sourcing et de logistique basés à Guangzhou.<br><br>Nous étudions votre projet et nos experts vont vous recontacter par email ou WhatsApp d'ici 24 heures ouvrées. Passez une excellente journée !`;
+        appendBotMessage(successMsg);
         break;
 
       case 'success':
-        appendBotMessage("Votre demande est déjà en cours de traitement ! Vous pouvez fermer ce chat ou poser une autre question spécifique sur nos services.");
+        appendBotMessage("Vos détails de sourcing ont été enregistrés ! Si vous souhaitez soumettre un autre projet ou modifier vos données, n'hésitez pas à nous écrire directement par WhatsApp au +86 183 2005 0031.");
         break;
     }
   }
@@ -460,22 +508,22 @@ document.addEventListener('DOMContentLoaded', () => {
   function repromptCurrentStep() {
     switch (currentStep) {
       case 'name':
-        appendBotMessage("Commençons par faire connaissance : comment puis-je vous appeler ?");
+        appendBotMessage("Pour commencer, dites-moi simplement : quel est votre nom ou le nom de votre entreprise ?");
         break;
       case 'product':
-        appendBotMessage(dialogFlow.product.replace('{name}', leadData.name || 'cher visiteur'));
+        appendBotMessage(`Dites-moi <strong>${leadData.name}</strong>, quel type de produit recherchez-vous en Chine ?`);
         break;
       case 'country':
-        appendBotMessage(dialogFlow.country);
+        appendBotMessage(`Dans quelle ville ou port devons-nous expédier vos marchandises ?`);
         break;
       case 'budget':
-        appendBotMessage(dialogFlow.budget);
+        appendBotMessage(`Quel est votre budget global ou la quantité approximative de produits ?`);
         break;
       case 'email':
-        appendBotMessage(dialogFlow.email);
+        appendBotMessage(`À quelle adresse email souhaitez-vous recevoir nos fiches fournisseurs ?`);
         break;
       case 'phone':
-        appendBotMessage(dialogFlow.phone);
+        appendBotMessage(`Et quel est votre numéro de téléphone (WhatsApp si possible) ?`);
         break;
     }
   }
