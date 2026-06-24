@@ -258,12 +258,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Dynamic greeting
       const greetingEl = document.querySelector('.dashboard__greeting');
+      const containerCode = localStorage.getItem('gz-empire-user-container') || '';
       if (greetingEl) {
-        const containerCode = localStorage.getItem('gz-empire-user-container') || '';
         if (containerCode) {
           greetingEl.textContent = `Bonjour, Client [${containerCode}]`;
         } else {
           greetingEl.textContent = `Bonjour, Client`;
+        }
+      }
+
+      // Dynamic search input value on login
+      const searchInput = document.getElementById('shipmentSearchInput');
+      if (searchInput) {
+        const accessType = localStorage.getItem('gz-empire-user-access-type') || 'client-code';
+        if ((accessType === 'container' || accessType === 'order') && containerCode) {
+          searchInput.value = containerCode;
+        } else {
+          // Client code login: default to first available shipment if any
+          let storedShipments = [];
+          try {
+            storedShipments = JSON.parse(localStorage.getItem('gz-empire-shipments') || '[]');
+          } catch (e) {}
+          const firstShip = storedShipments.find(s => s && s.container);
+          if (firstShip) {
+            searchInput.value = firstShip.container;
+          } else {
+            searchInput.value = '';
+          }
         }
       }
 
@@ -304,7 +325,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // Current active search value
       const searchInput = document.getElementById('shipmentSearchInput');
-      const activeRef = searchInput ? searchInput.value.trim().toUpperCase() : 'GZEMP2024001';
+      const activeRef = searchInput ? searchInput.value.trim().toUpperCase() : '';
 
       quickListContainer.innerHTML = '';
       shipments.forEach(s => {
@@ -326,56 +347,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ─── SHIPMENT SEARCH & DATA MOCK ───
-  const shipmentData = {
-    'GZEMP2024001': {
-      type: "Conteneur maritime (40' HC)",
-      ref: "GZEMP2024001",
-      statusText: "En Transit Maritime",
-      progress: 60, // percentage for fill
-      step: 3, // active step (1-5)
-      origin: "Guangzhou, Chine",
-      dest: "Pointe-Noire, Congo",
-      dateOut: "10 Juin 2026",
-      dateEta: "28 Juin 2026",
-      invoice: "Facture Commerciale INV-2024-001",
-      invoiceMeta: "Taille : 240 KB · Générée le 10/06/2026",
-      packingList: "Packing List PL-2024-001",
-      packingListMeta: "Taille : 185 KB · Générée le 09/06/2026",
-      imgSrc: "img/package_GZEMP2024001.png",
-      imgName: "Lot Électronique GZEMP2024001",
-      imgLabel: "Inspection Validée - Guangzhou",
-      notifications: [
-        { message: "Le conteneur GZEMP2024001 a passé le détroit de Malacca. En route vers Pointe-Noire.", time: "Aujourd'hui, 14:30", type: "ship" },
-        { message: "Transit maritime initié. Le navire a quitté le port de Guangzhou.", time: "10 Juin 2026, 09:00", type: "ship" },
-        { message: "Chargement du conteneur validé. Scellé de sécurité apposé.", time: "08 Juin 2026, 16:15", type: "ship" },
-        { message: "Facture commerciale INV-2024-001 émise et disponible.", time: "05 Juin 2026, 11:00", type: "invoice" }
-      ]
-    },
-    'GZEMP2024002': {
-      type: "Colis / Fret Aérien",
-      ref: "GZEMP2024002",
-      statusText: "Reçu en Entrepôt",
-      progress: 20,
-      step: 1,
-      origin: "Foshan, Chine",
-      dest: "Abidjan, Côte d'Ivoire",
-      dateOut: "12 Juin 2026",
-      dateEta: "19 Juin 2026",
-      invoice: "Facture Commerciale INV-2024-002",
-      invoiceMeta: "Taille : 310 KB · Générée le 12/06/2026",
-      packingList: "Packing List PL-2024-002",
-      packingListMeta: "Taille : 140 KB · Générée le 12/06/2026",
-      imgSrc: "img/package_GZEMP2024002.png",
-      imgName: "Lot Mobilier & Textiles GZEMP2024002",
-      imgLabel: "Contrôle Qualité Effectué - Guangzhou",
-      notifications: [
-        { message: "Votre colis est prêt pour le chargement. Départ prévu le 15/06.", time: "Aujourd'hui, 18:00", type: "ship" },
-        { message: "Rapport de contrôle qualité validé. Photos disponibles.", time: "Aujourd'hui, 15:30", type: "quality" },
-        { message: "Colis reçu à notre entrepôt de Guangzhou en provenance de Foshan.", time: "Aujourd'hui, 11:20", type: "ship" },
-        { message: "Facture INV-2024-002 émise.", time: "Aujourd'hui, 09:00", type: "invoice" }
-      ]
-    }
-  };
+  const shipmentData = {};
 
   function searchShipment() {
     try {
@@ -384,6 +356,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const ref = input.value.trim().toUpperCase();
       const errorEl = document.getElementById('shipmentSearchError');
       const resultContainer = document.getElementById('shipmentResultContainer');
+
+      if (!ref) {
+        if (errorEl) errorEl.classList.add('hidden');
+        if (resultContainer) resultContainer.classList.add('hidden');
+        return;
+      }
 
       // Check if the container exists in localStorage shipments
       let storedShipments = [];
@@ -690,8 +668,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   window.downloadInvoiceMock = function() {
     const input = document.getElementById('shipmentSearchInput');
-    const ref = input ? input.value.trim().toUpperCase() : 'GZEMP2024001';
-    alert(`Téléchargement de la facture INV-2024-${ref === 'GZEMP2024002' ? '002' : '001'} au format PDF...`);
+    const ref = input ? input.value.trim().toUpperCase() : '';
+    alert(`Téléchargement de la facture INV-${ref || 'EXP'} au format PDF...`);
   };
 
   // ─── NOTIFICATIONS DROPDOWN ENGINE ───
