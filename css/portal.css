@@ -459,6 +459,29 @@
   align-items: center;
   flex-wrap: wrap;
   gap: var(--space-6);
+  position: relative;
+  z-index: 1;
+}
+
+.hero-image-corner {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  width: 45%;
+  max-width: 400px;
+  overflow: hidden;
+  pointer-events: none;
+  mask-image: linear-gradient(to left, rgba(0, 0, 0, 0.4) 60%, rgba(0, 0, 0, 0) 100%);
+  -webkit-mask-image: linear-gradient(to left, rgba(0, 0, 0, 0.4) 60%, rgba(0, 0, 0, 0) 100%);
+}
+
+.hero-image-corner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.35;
+  filter: grayscale(10%) contrast(110%);
 }
 
 .dashboard__hero-text {
