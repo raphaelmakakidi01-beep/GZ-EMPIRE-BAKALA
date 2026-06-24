@@ -70,30 +70,34 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         if (submitBtn) submitBtn.classList.remove('loading');
 
-        // Validate: the code must match either:
-        // 1. An existing container number in the system (shipments)
+        // Validate: the code must match any of:
+        // 1. An existing container number (gz-empire-shipments)
         // 2. An admin-generated client access code (gz-empire-client-codes)
+        // 3. An order reference number (gz-empire-orders)
         let storedShipments = [];
-        try {
-          storedShipments = JSON.parse(localStorage.getItem('gz-empire-shipments') || '[]');
-        } catch (e) {}
+        try { storedShipments = JSON.parse(localStorage.getItem('gz-empire-shipments') || '[]'); } catch (e) {}
 
         let clientCodes = [];
-        try {
-          clientCodes = JSON.parse(localStorage.getItem('gz-empire-client-codes') || '[]');
-        } catch (e) {}
+        try { clientCodes = JSON.parse(localStorage.getItem('gz-empire-client-codes') || '[]'); } catch (e) {}
+
+        let storedOrders = [];
+        try { storedOrders = JSON.parse(localStorage.getItem('gz-empire-orders') || '[]'); } catch (e) {}
 
         const validContainer = storedShipments.some(s => s && s.container && s.container.toUpperCase() === enteredCode);
         const validClientCode = clientCodes.some(c => c && c.code && c.code.toUpperCase() === enteredCode);
-        const isValid = validContainer || validClientCode;
+        const validOrderRef = storedOrders.some(o => o && o.ref && o.ref.toUpperCase() === enteredCode);
+        const isValid = validContainer || validClientCode || validOrderRef;
+
+        let accessType = 'client-code';
+        if (validContainer) accessType = 'container';
+        else if (validOrderRef) accessType = 'order';
 
         if (isValid) {
-          // Save login state with the container ref or access code
+          // Save login state
           localStorage.setItem('gz-empire-user-logged', 'true');
           localStorage.setItem('gz-empire-user-email', enteredEmail);
           localStorage.setItem('gz-empire-user-container', enteredCode);
-          // Mark the type of access so the dashboard can adapt
-          localStorage.setItem('gz-empire-user-access-type', validContainer ? 'container' : 'client-code');
+          localStorage.setItem('gz-empire-user-access-type', accessType);
           if (loginView) loginView.classList.add('hidden');
           if (dashboardView) dashboardView.classList.remove('hidden');
           initializeDashboard();
