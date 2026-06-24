@@ -2011,6 +2011,107 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   });
+
+  // ─── ADMIN NOTIFICATIONS TOAST & SYNC ENGINE ───
+  function showAdminToast(message, type = 'info') {
+    let container = document.getElementById('adminToastContainer');
+    if (!container) {
+      container = document.createElement('div');
+      container.id = 'adminToastContainer';
+      container.style.cssText = 'position: fixed; top: 24px; right: 24px; z-index: 10000; display: flex; flex-direction: column; gap: 10px; pointer-events: none;';
+      document.body.appendChild(container);
+    }
+
+    const toast = document.createElement('div');
+    toast.style.cssText = 'background: #0A0F24; border: 1.5px solid rgba(212, 175, 55, 0.3); border-left: 4px solid var(--gold); border-radius: 12px; padding: 14px 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: flex; align-items: center; gap: 12px; color: white; min-width: 300px; max-width: 420px; transform: translateX(120%); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s; opacity: 0; pointer-events: auto; cursor: pointer;';
+    
+    if (type === 'success') {
+      toast.style.borderLeftColor = 'var(--gold)';
+    } else if (type === 'info') {
+      toast.style.borderLeftColor = '#3B82F6';
+    }
+
+    let iconHtml = '';
+    if (type === 'success') {
+      iconHtml = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`;
+    } else {
+      iconHtml = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="16" y2="12"/><line x1="12" x2="12.01" y1="8" y2="8"/></svg>`;
+    }
+
+    toast.innerHTML = `
+      <div style="flex-shrink: 0; display: flex; align-items: center;">${iconHtml}</div>
+      <div style="flex: 1; font-size: 11px; font-weight: 500; line-height: 1.4;">${message}</div>
+      <button style="background: none; border: none; color: rgba(255,255,255,0.4); cursor: pointer; font-size: 12px; font-weight: bold; padding: 0 4px;">✕</button>
+    `;
+
+    container.appendChild(toast);
+
+    setTimeout(() => {
+      toast.style.transform = 'translateX(0)';
+      toast.style.opacity = '1';
+    }, 50);
+
+    try {
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const oscillator = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+      oscillator.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+      oscillator.type = 'sine';
+      oscillator.frequency.value = 587.33;
+      gainNode.gain.setValueAtTime(0.04, audioCtx.currentTime);
+      oscillator.start();
+      oscillator.stop(audioCtx.currentTime + 0.12);
+    } catch (e) {}
+
+    const dismiss = () => {
+      toast.style.transform = 'translateX(120%)';
+      toast.style.opacity = '0';
+      setTimeout(() => {
+        toast.remove();
+      }, 400);
+    };
+
+    toast.addEventListener('click', dismiss);
+    const closeBtn = toast.querySelector('button');
+    closeBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dismiss();
+    });
+
+    setTimeout(dismiss, 6000);
+  }
+
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'gz-empire-orders') {
+      try {
+        const stored = JSON.parse(e.newValue || '[]');
+        const old = JSON.parse(e.oldValue || '[]');
+        if (stored.length > old.length) {
+          const newOrder = stored[0];
+          if (newOrder) {
+            showAdminToast(`Nouvelle commande reçue ! Réf: ${newOrder.ref} - ${newOrder.product} par ${newOrder.client}`, 'success');
+          }
+        }
+      } catch (err) {}
+      loadOrdersData();
+      updateAdvancedStats();
+    }
+    if (e.key === 'gz-empire-prospects') {
+      try {
+        const stored = JSON.parse(e.newValue || '[]');
+        const old = JSON.parse(e.oldValue || '[]');
+        if (stored.length > old.length) {
+          const newProspect = stored[0];
+          if (newProspect) {
+            showAdminToast(`Nouveau lead CRM / Accompagnement : ${newProspect.name} - ${newProspect.product}`, 'info');
+          }
+        }
+      } catch (err) {}
+      loadProspectsData();
+      updateAdvancedStats();
+    }
+  });
 });
 
 })();

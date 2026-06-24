@@ -246,6 +246,115 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  function loadBookingHistory() {
+    const bookingHistoryList = document.getElementById('bookingHistoryList');
+    if (!bookingHistoryList) return;
+
+    let storedProspects = [];
+    try {
+      storedProspects = JSON.parse(localStorage.getItem('gz-empire-prospects') || '[]');
+    } catch(e) {}
+
+    const clientCode = localStorage.getItem('gz-empire-user-container') || '';
+    const email = localStorage.getItem('gz-empire-user-email') || '';
+
+    // Filter prospects belonging to this client (by client code or email)
+    const clientBookings = storedProspects.filter(p => p && (p.name === `Client [${clientCode}]` || (email && p.email === email)) && p.product.startsWith("Accompagnement"));
+
+    if (clientBookings.length === 0) {
+      bookingHistoryList.innerHTML = `<p class="empty-history-text" style="color: var(--gray-500); font-size: var(--text-xs); text-align: center; padding: var(--space-4); margin: 0;">Aucune demande d'accompagnement pour le moment.</p>`;
+      return;
+    }
+
+    bookingHistoryList.innerHTML = '';
+    clientBookings.forEach(p => {
+      let motif = p.notes;
+      let details = '';
+      try {
+        const parts = p.notes.split(' | ');
+        const motifPart = parts[0] ? parts[0].replace('Motif : ', '') : '';
+        const villesPart = parts[1] ? parts[1].replace('Villes : ', '') : '';
+        const datesPart = parts[2] ? parts[2].replace('Dates : ', '') : '';
+        motif = motifPart;
+        details = `Villes : ${villesPart} · Dates : ${datesPart} · Besoins : ${p.product.replace('Accompagnement (Besoins : ', '').replace(')', '')}`;
+      } catch (err) {}
+
+      const badgeClass = p.status === 'converti' ? 'badge--success' : (p.status === 'perdu' ? 'badge--danger' : 'badge--warning');
+      const badgeText = p.status === 'converti' ? 'Confirmé & Validé' : (p.status === 'perdu' ? 'Annulé' : 'En attente de traitement');
+      const dotClass = p.status === 'converti' ? 'success' : (p.status === 'perdu' ? 'danger' : 'warning');
+
+      const item = `
+        <div class="action-item" style="padding-bottom: var(--space-4);">
+          <div class="action-item__dot ${dotClass}" style="margin-top: 8px;"></div>
+          <div class="action-item__content">
+            <p class="action-item__text" style="font-weight: 600;">${motif}</p>
+            <p style="font-size: var(--text-xs); color: var(--gray-500); margin-top: 2px;">${details}</p>
+            <span class="badge ${badgeClass}" style="width: fit-content; margin-top: var(--space-2); font-size: 10px;">${badgeText}</span>
+          </div>
+        </div>
+      `;
+      bookingHistoryList.insertAdjacentHTML('beforeend', item);
+    });
+  }
+
+  function loadPurchasingHistory() {
+    const purchasingHistoryTable = document.getElementById('purchasingHistoryTable');
+    if (!purchasingHistoryTable) return;
+
+    let storedOrders = [];
+    try {
+      storedOrders = JSON.parse(localStorage.getItem('gz-empire-orders') || '[]');
+    } catch(e) {}
+
+    const clientCode = localStorage.getItem('gz-empire-user-container') || '';
+    const email = localStorage.getItem('gz-empire-user-email') || '';
+
+    // Filter orders belonging to this client (by client name or email)
+    const clientOrders = storedOrders.filter(o => o && (o.client.startsWith(clientCode) || (email && o.client.includes(email))));
+
+    if (clientOrders.length === 0) {
+      purchasingHistoryTable.innerHTML = `
+        <tr>
+          <td colspan="4" style="text-align: center; color: var(--gray-500); font-size: var(--text-xs); padding: var(--space-4);">Aucune demande d'achat pour le moment.</td>
+        </tr>
+      `;
+      return;
+    }
+
+    purchasingHistoryTable.innerHTML = '';
+    clientOrders.forEach(o => {
+      let productTitle = o.product;
+      let qtyText = '-';
+      try {
+        const parts = o.product.split(' (Qté: ');
+        productTitle = parts[0];
+        qtyText = parts[1] ? parts[1].replace(')', '') : '-';
+      } catch (err) {}
+
+      const badgeClass = o.status === 'termine' ? 'badge--success' : (o.status === 'perdu' ? 'badge--danger' : (o.status === 'nouveau' ? 'badge--warning' : 'badge--info'));
+      const badgeText = o.status === 'termine' ? 'Acheté & Reçu' : (o.status === 'perdu' ? 'Annulé' : (o.status === 'nouveau' ? 'En attente' : 'Recherche en cours'));
+      const iconBg = o.status === 'termine' ? 'rgba(16, 185, 129, 0.1)' : (o.status === 'perdu' ? 'rgba(239, 68, 68, 0.1)' : (o.status === 'nouveau' ? 'rgba(245, 158, 11, 0.1)' : 'rgba(59, 130, 246, 0.1)'));
+      const iconColor = o.status === 'termine' ? 'var(--success)' : (o.status === 'perdu' ? 'var(--danger)' : (o.status === 'nouveau' ? 'var(--warning)' : 'var(--info)'));
+
+      const row = `
+        <tr>
+          <td>
+            <div class="order-product">
+              <div class="order-product__icon" style="background:${iconBg};color:${iconColor};">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"/><polyline points="17 2 12 7 7 2"/></svg>
+              </div>
+              <span style="font-weight: 600;">${productTitle}</span>
+            </div>
+          </td>
+          <td>${qtyText}</td>
+          <td>${o.amount}</td>
+          <td><span class="badge ${badgeClass}">${badgeText}</span></td>
+        </tr>
+      `;
+      purchasingHistoryTable.insertAdjacentHTML('beforeend', row);
+    });
+  }
+
   function initializeDashboard() {
     try {
       // Current date render
@@ -299,6 +408,8 @@ document.addEventListener('DOMContentLoaded', () => {
       switchTab('shipments');
       renderShipmentsQuickList();
       searchShipment();
+      loadBookingHistory();
+      loadPurchasingHistory();
     } catch (err) {
       console.error("Error in initializeDashboard:", err);
     }
@@ -679,34 +790,43 @@ document.addEventListener('DOMContentLoaded', () => {
     const startDate = document.getElementById('bookingStartDate').value;
     const endDate = document.getElementById('bookingEndDate').value;
 
-    const bookingHistoryList = document.getElementById('bookingHistoryList');
-    if (bookingHistoryList) {
-      const formattedStart = new Date(startDate).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
-      const formattedEnd = new Date(endDate).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
+    const formattedStart = new Date(startDate).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
+    const formattedEnd = new Date(endDate).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' });
 
-      // Gather checklist
-      let needs = [];
-      if (document.getElementById('needInterpreter').checked) needs.push("Interprète");
-      if (document.getElementById('needCar').checked) needs.push("Chauffeur");
-      if (document.getElementById('needHotel').checked) needs.push("Hôtel");
-      if (document.getElementById('needVisa').checked) needs.push("Invitation Visa");
-      const needsStr = needs.length > 0 ? needs.join(', ') : "Aucune assistance spécifique";
+    // Gather checklist
+    let needs = [];
+    if (document.getElementById('needInterpreter').checked) needs.push("Interprète");
+    if (document.getElementById('needCar').checked) needs.push("Chauffeur");
+    if (document.getElementById('needHotel').checked) needs.push("Hôtel");
+    if (document.getElementById('needVisa').checked) needs.push("Invitation Visa");
+    const needsStr = needs.length > 0 ? needs.join(', ') : "Aucune assistance spécifique";
 
-      const newItem = `
-        <div class="action-item" style="padding-bottom: var(--space-4); animation: fadeIn 0.4s ease-out;">
-          <div class="action-item__dot warning" style="margin-top: 8px;"></div>
-          <div class="action-item__content">
-            <p class="action-item__text" style="font-weight: 600;">${reason}</p>
-            <p style="font-size: var(--text-xs); color: var(--gray-500); margin-top: 2px;">Villes : ${cities} · Dates : ${formattedStart} - ${formattedEnd} · Besoins : ${needsStr}</p>
-            <span class="badge badge--warning" style="width: fit-content; margin-top: var(--space-2); font-size: 10px;">En attente de traitement</span>
-          </div>
-        </div>
-      `;
-      bookingHistoryList.insertAdjacentHTML('afterbegin', newItem);
+    const clientCode = localStorage.getItem('gz-empire-user-container') || 'Client';
+    const email = localStorage.getItem('gz-empire-user-email') || '';
+
+    // Save to localStorage as a CRM prospect
+    try {
+      const storedProspects = JSON.parse(localStorage.getItem('gz-empire-prospects') || '[]');
+      const newProspect = {
+        name: `Client [${clientCode}]`,
+        email: email || 'Non spécifié',
+        phone: 'Non spécifié',
+        country: 'Chine (Voyage)',
+        product: `Accompagnement (Besoins : ${needsStr})`,
+        budget: 'Non spécifié',
+        status: 'nouveau',
+        date: new Date().toLocaleDateString('fr-FR'),
+        notes: `Motif : ${reason} | Villes : ${cities} | Dates : ${formattedStart} - ${formattedEnd}`
+      };
+      storedProspects.unshift(newProspect);
+      localStorage.setItem('gz-empire-prospects', JSON.stringify(storedProspects));
+    } catch (e) {
+      console.error("Error saving booking prospect:", e);
     }
 
     // Reset Form
     document.getElementById('bookingForm').reset();
+    loadBookingHistory();
     showPortalAlert("Demande Reçue", "Votre demande de réservation d'accompagnement a été soumise avec succès. Notre équipe vous contactera dans les plus brefs délais.", "success");
   };
 
@@ -715,29 +835,34 @@ document.addEventListener('DOMContentLoaded', () => {
     const qty = document.getElementById('productQty').value;
     const budget = document.getElementById('productBudget').value;
 
-    const purchasingHistoryTable = document.getElementById('purchasingHistoryTable');
-    if (purchasingHistoryTable) {
-      const newRow = `
-        <tr style="animation: fadeIn 0.4s ease-out;">
-          <td>
-            <div class="order-product">
-              <div class="order-product__icon" style="background:rgba(245,158,11,0.1);color:var(--warning);">
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="15" rx="2" ry="2"/><polyline points="17 2 12 7 7 2"/></svg>
-              </div>
-              <span style="font-weight: 600;">${desc.substring(0, 30)}${desc.length > 30 ? '...' : ''}</span>
-            </div>
-          </td>
-          <td>${qty}</td>
-          <td>$${parseFloat(budget).toLocaleString()}</td>
-          <td><span class="badge badge--warning">En attente</span></td>
-        </tr>
-      `;
-      purchasingHistoryTable.insertAdjacentHTML('afterbegin', newRow);
+    const clientCode = localStorage.getItem('gz-empire-user-container') || 'Client';
+    const email = localStorage.getItem('gz-empire-user-email') || '';
+    const clientName = email ? `${clientCode} (${email})` : clientCode;
+
+    // Save to localStorage as an order
+    try {
+      const storedOrders = JSON.parse(localStorage.getItem('gz-empire-orders') || '[]');
+      const refCode = "GZ-ORD-" + Math.floor(100000 + Math.random() * 900000);
+      
+      const newOrder = {
+        ref: refCode,
+        client: clientName,
+        product: `${desc} (Qté: ${qty})`,
+        amount: `$${parseFloat(budget).toLocaleString()}`,
+        payment: "Non Payé",
+        status: "nouveau"
+      };
+      
+      storedOrders.unshift(newOrder);
+      localStorage.setItem('gz-empire-orders', JSON.stringify(storedOrders));
+    } catch (e) {
+      console.error("Error saving purchase order:", e);
     }
 
     // Reset Form
     document.getElementById('purchasingForm').reset();
     window.removeProductPhoto();
+    loadPurchasingHistory();
     showPortalAlert("Demande Transmise", "Votre demande d'achat direct a été transmise. Nos acheteurs négocient le meilleur prix auprès des fournisseurs chinois.", "success");
   };
 
