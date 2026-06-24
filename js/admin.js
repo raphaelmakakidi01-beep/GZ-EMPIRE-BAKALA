@@ -1323,6 +1323,11 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
     });
 
+    const cleanPhone = chat.phone ? chat.phone.replace(/[^0-9]/g, '') : '';
+    const onClickAttr = cleanPhone 
+      ? `window.open('https://wa.me/${cleanPhone}')` 
+      : `alert('Numéro WhatsApp non renseigné par le visiteur.')`;
+
     div.innerHTML = `
       <div class="admin-conversation__visitor">
         <span class="admin-conversation__visitor-dot"></span>
@@ -1332,7 +1337,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="conversation-messages" style="margin-bottom: var(--space-3)">
         ${messagesHTML}
       </div>
-      <a class="admin-conversation__link" onclick="${chat.phone ? `window.open('https://wa.me/${chat.phone.replace(/[^0-9]/g, \'\')}')` : `alert(\'Numéro WhatsApp non renseigné par le visiteur.\')`}">
+      <a class="admin-conversation__link" onclick="${onClickAttr}">
         Prendre le contrôle (Ouvrir WhatsApp)
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 5v14"/></svg>
       </a>
