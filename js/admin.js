@@ -309,7 +309,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const prospectsCountEl = document.getElementById('statProspectsCount');
       const badgeCountEl = document.getElementById('prospectBadgeCount');
       if (prospectsCountEl) prospectsCountEl.textContent = prospects.length;
-      if (badgeCountEl) badgeCountEl.textContent = prospects.length;
+      if (badgeCountEl) {
+        badgeCountEl.textContent = prospects.length;
+        badgeCountEl.style.display = prospects.length > 0 ? 'inline-block' : 'none';
+      }
 
       // Render in dashboard (last 5 items)
       const dashboardBody = document.getElementById('prospectsTableBody');
@@ -438,13 +441,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Helper to escape HTML characters
   function escapeHTML(str) {
-    if (!str) return '';
-    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+    if (str === null || str === undefined) return '';
+    const s = String(str);
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
   }
 
   function escapeQuotes(str) {
-    if (!str) return '';
-    return str.replace(/'/g, "\\'").replace(/"/g, '\\"');
+    if (str === null || str === undefined) return '';
+    const s = String(str);
+    return s.replace(/'/g, "\\'").replace(/"/g, '\\"');
+  }
+
+  function parseDateStr(str) {
+    if (!str) return null;
+    const s = String(str).trim();
+    const parts = s.split('/');
+    if (parts.length === 3) {
+      const day = parseInt(parts[0], 10);
+      const month = parseInt(parts[1], 10) - 1;
+      const year = parseInt(parts[2], 10);
+      const d = new Date(year, month, day);
+      if (!isNaN(d.getTime())) return d;
+    }
+    const d = new Date(s);
+    if (!isNaN(d.getTime())) return d;
+    return null;
   }
 
   // ─── LOGISTICS EXPÉDITIONS DATA ───
@@ -476,8 +497,11 @@ document.addEventListener('DOMContentLoaded', () => {
       // Update active shipments count
       const activeShipmentsBadge = document.getElementById('activeShipmentsBadge');
       const statTransitCount = document.getElementById('statTransitCount');
-      if (activeShipmentsBadge) activeShipmentsBadge.textContent = shipments.length;
-      if (statTransitCount) statTransitCount.textContent = shipments.filter(s => s && (s.status === 'transit' || s.status === 'qualite' || s.status === 'chargement')).length || shipments.length;
+      if (activeShipmentsBadge) {
+        activeShipmentsBadge.textContent = shipments.length;
+        activeShipmentsBadge.style.display = shipments.length > 0 ? 'inline-block' : 'none';
+      }
+      if (statTransitCount) statTransitCount.textContent = shipments.filter(s => s && (s.status === 'transit' || s.status === 'qualite' || s.status === 'chargement')).length;
 
       // Render table
       const shipmentsBody = document.getElementById('adminShipmentsTableBody');
@@ -1211,11 +1235,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const statSourcingSuccess = document.getElementById('statSourcingSuccess');
       if (statSourcingSuccess) {
         if (prospects && prospects.length) {
-          const successCount = prospects.filter(p => p.status === 'converti' || p.status === 'qualifie').length;
+          const successCount = prospects.filter(p => p && (p.status === 'converti' || p.status === 'qualifie')).length;
           const rate = Math.round((successCount / prospects.length) * 100);
           statSourcingSuccess.textContent = rate + '%';
         } else {
-          statSourcingSuccess.textContent = '100%';
+          statSourcingSuccess.textContent = '0%';
         }
       }
 
@@ -1227,17 +1251,30 @@ document.addEventListener('DOMContentLoaded', () => {
           let sum = 0;
           shipments.forEach(s => {
             if (s && s.eta) {
-              const num = parseInt(s.eta.replace(/[^0-9]/g, ''));
-              if (!isNaN(num)) {
+              const depDate = s.departure ? parseDateStr(s.departure) : null;
+              const etaDate = parseDateStr(s.eta);
+              if (depDate && etaDate) {
+                const diffTime = etaDate.getTime() - depDate.getTime();
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                if (diffDays > 0) {
+                  sum += diffDays;
+                  count++;
+                  return;
+                }
+              }
+              // Fallback to parsing digits directly if not a date
+              const etaStr = String(s.eta);
+              const num = parseInt(etaStr.replace(/[^0-9]/g, ''));
+              if (!isNaN(num) && num < 1000) {
                 sum += num;
                 count++;
               }
             }
           });
-          const avg = count > 0 ? Math.round(sum / count) : 30;
-          statAvgTransitTime.textContent = avg + ' j';
+          const avg = count > 0 ? Math.round(sum / count) : 0;
+          statAvgTransitTime.textContent = avg > 0 ? avg + ' j' : '0 j';
         } else {
-          statAvgTransitTime.textContent = '30 j';
+          statAvgTransitTime.textContent = '0 j';
         }
       }
 
@@ -1245,11 +1282,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const statEngagementRate = document.getElementById('statEngagementRate');
       if (statEngagementRate) {
         if (chats && chats.length) {
-          const engaged = chats.filter(c => c.messages && c.messages.length > 3).length;
+          const engaged = chats.filter(c => c && c.messages && c.messages.length > 3).length;
           const rate = Math.round((engaged / chats.length) * 100);
           statEngagementRate.textContent = Math.max(70, rate) + '%';
         } else {
-          statEngagementRate.textContent = '95%';
+          statEngagementRate.textContent = '0%';
         }
       }
 
