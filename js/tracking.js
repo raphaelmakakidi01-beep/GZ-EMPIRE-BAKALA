@@ -69,8 +69,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const resultsSection = document.getElementById('resultsSection');
   const trackingError = document.getElementById('trackingError');
   const errorContainerId = document.getElementById('errorContainerId');
-  const demoBtn = document.getElementById('demoBtn');
-  const demoBtn2 = document.getElementById('demoBtn2');
 
   let activeShipment = null;
 
@@ -151,9 +149,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const contMatch = s.container.trim().toUpperCase() === searchRef;
       
       // Compute bill of lading matching
-      const generatedBL = `${s.carrier.split(' ')[0].toUpperCase()}-GZ-2026-${(getHashCode(s.container) % 9000) + 1000}`.toUpperCase();
-      const demoBL = `COSCO-GZ-2024-0312`.toUpperCase();
-      const blMatch = (generatedBL === searchRef || (s.container === "GZEMP2024001" && demoBL === searchRef));
+      const generatedBL = `${s.carrier ? s.carrier.split(' ')[0].toUpperCase() : 'SHIP'}-GZ-2026-${(getHashCode(s.container) % 9000) + 1000}`.toUpperCase();
+      const blMatch = (generatedBL === searchRef);
       
       return contMatch || blMatch;
     });
@@ -705,20 +702,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Demo buttons triggers
-  if (demoBtn) {
-    demoBtn.addEventListener('click', () => {
-      trackingInput.value = 'GZEMP2024001';
-      performSearch('GZEMP2024001');
-    });
-  }
 
-  if (demoBtn2) {
-    demoBtn2.addEventListener('click', () => {
-      trackingInput.value = 'COSCO-GZ-2024-0312';
-      performSearch('COSCO-GZ-2024-0312');
-    });
-  }
 
   /* ─── Alert Subscriptions & WhatsApp Toggle ─── */
   const alertForm = document.getElementById('alertForm');

@@ -1332,8 +1332,8 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="conversation-messages" style="margin-bottom: var(--space-3)">
         ${messagesHTML}
       </div>
-      <a class="admin-conversation__link" onclick="alert('Option de reprise en main humaine non disponible en mode démonstration.')">
-        Prendre le contrôle du chat
+      <a class="admin-conversation__link" onclick="${chat.phone ? `window.open('https://wa.me/${chat.phone.replace(/[^0-9]/g, \'\')}')` : `alert(\'Numéro WhatsApp non renseigné par le visiteur.\')`}">
+        Prendre le contrôle (Ouvrir WhatsApp)
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 7-7 7 7"/><path d="M12 5v14"/></svg>
       </a>
     `;

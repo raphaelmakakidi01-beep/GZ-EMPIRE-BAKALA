@@ -575,6 +575,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const newChat = {
         visitor: `${leadData.name || 'Visiteur'} (${leadData.country || 'Inconnu'})`,
+        phone: leadData.phone || '',
         time: "À l'instant",
         messages: chatMessages
       };
