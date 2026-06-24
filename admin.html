@@ -416,8 +416,12 @@
             <div class="admin-panel__header" style="border-bottom: none;">
               <div class="admin-panel__title">Base Complète des Prospects Qualifiés</div>
               <div style="display:flex; gap: 8px; align-items: center;">
-                <input type="text" id="prospectsSearchInput" class="form-input" placeholder="Rechercher..." style="width: 200px; padding: 6px 12px; background: rgba(255,255,255,0.04); color:white; border-color:rgba(255,255,255,0.08); font-size:12px; border-radius:8px;">
-                <button class="btn btn--primary btn--sm" id="btnExportFullXls" style="font-size:12px; padding:6px 14px;">Exporter tout</button>
+                <input type="text" id="prospectsSearchInput" class="form-input" placeholder="Rechercher par nom, email, pays..." style="width: 220px; padding: 6px 12px; background: rgba(255,255,255,0.04); color:white; border-color:rgba(255,255,255,0.08); font-size:12px; border-radius:8px;">
+                <button class="btn btn--primary btn--sm" id="btnAddNewProspect" style="font-size:12px; padding:6px 14px; display:flex; align-items:center; gap:5px;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                  Ajouter
+                </button>
+                <button class="btn btn--secondary btn--sm" id="btnExportFullXls" style="font-size:12px; padding:6px 14px; border-color:rgba(255,255,255,0.15); color:rgba(255,255,255,0.7);">Exporter CSV</button>
               </div>
             </div>
             
@@ -443,7 +447,7 @@
                     <th>Budget</th>
                     <th>Statut</th>
                     <th>Date</th>
-                    <th>Actions</th>
+                    <th style="min-width:140px;">Actions</th>
                   </tr>
                 </thead>
                 <tbody id="fullProspectsTableBody">
@@ -866,6 +870,150 @@
         <div class="admin-modal-footer">
           <button type="button" id="cancelOrderModal" class="btn btn--secondary">Annuler</button>
           <button type="submit" class="btn btn--primary">Sauvegarder</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       Modal: Ajouter / Modifier un Prospect CRM
+       ══════════════════════════════════════════════════ -->
+  <div id="prospectModal" class="admin-modal" style="display: none;">
+    <div class="admin-modal-content" style="max-width: 640px;">
+      <div class="admin-modal-header">
+        <h3 id="modalProspectTitle" class="admin-modal-title">Nouveau Prospect</h3>
+        <button id="closeProspectModal" class="admin-modal-close" type="button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <!-- Auto-fill hint banner -->
+      <div id="prospectAutoFillHint" style="margin: 0 0 var(--space-4); background: rgba(212,175,55,0.08); border: 1px solid rgba(212,175,55,0.25); border-radius: 10px; padding: 10px 14px; font-size: 12px; color: rgba(212,175,55,0.9); display:flex; align-items:center; gap:8px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+        Saisissez l'email pour activer le remplissage automatique depuis les prospects existants.
+      </div>
+
+      <form id="prospectForm" autocomplete="off">
+        <input type="hidden" id="editProspectIndex" value="">
+
+        <!-- Row 1: Name + Email -->
+        <div class="admin-modal-grid-2">
+          <div class="form-group">
+            <label class="form-label" for="prospectName">Nom complet *</label>
+            <input type="text" id="prospectName" class="form-input" placeholder="Ex: Jean-Pierre Bakala" required list="prospectNameSuggestions" autocomplete="off">
+            <datalist id="prospectNameSuggestions"></datalist>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="prospectEmail">Email *</label>
+            <input type="email" id="prospectEmail" class="form-input" placeholder="client@email.com" required list="prospectEmailSuggestions" autocomplete="off">
+            <datalist id="prospectEmailSuggestions"></datalist>
+          </div>
+        </div>
+
+        <!-- Row 2: Phone + Country -->
+        <div class="admin-modal-grid-2">
+          <div class="form-group">
+            <label class="form-label" for="prospectPhone">Téléphone / WhatsApp</label>
+            <input type="tel" id="prospectPhone" class="form-input" placeholder="Ex: +242 06 123 4567" autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="prospectCountry">Pays *</label>
+            <input type="text" id="prospectCountry" class="form-input" placeholder="Ex: Congo, Cameroun..." required list="countryList" autocomplete="off">
+            <datalist id="countryList">
+              <option value="Congo (Brazzaville)"></option>
+              <option value="Congo (Kinshasa / RDC)"></option>
+              <option value="Cameroun"></option>
+              <option value="Côte d'Ivoire"></option>
+              <option value="Sénégal"></option>
+              <option value="Gabon"></option>
+              <option value="Mali"></option>
+              <option value="Togo"></option>
+              <option value="Bénin"></option>
+              <option value="Burkina Faso"></option>
+              <option value="Niger"></option>
+              <option value="Tchad"></option>
+              <option value="Centrafrique"></option>
+              <option value="Angola"></option>
+              <option value="Madagascar"></option>
+              <option value="Guinée"></option>
+              <option value="France"></option>
+              <option value="Belgique"></option>
+              <option value="Maroc"></option>
+              <option value="Algérie"></option>
+              <option value="Tunisie"></option>
+            </datalist>
+          </div>
+        </div>
+
+        <!-- Row 3: Product + Budget -->
+        <div class="admin-modal-grid-2">
+          <div class="form-group">
+            <label class="form-label" for="prospectProduct">Produit / Catégorie *</label>
+            <input type="text" id="prospectProduct" class="form-input" placeholder="Ex: Électronique 40' HC" required list="productList" autocomplete="off">
+            <datalist id="productList">
+              <option value="Électronique (smartphones, tablettes)"></option>
+              <option value="Électroménager (réfrigérateurs, climatiseurs)"></option>
+              <option value="Mobilier & Décoration"></option>
+              <option value="Matériaux de construction"></option>
+              <option value="Textile & Vêtements"></option>
+              <option value="Pièces automobiles & Véhicules"></option>
+              <option value="Jouets & Articles enfants"></option>
+              <option value="Alimentaire & Epicerie"></option>
+              <option value="Produits cosmétiques & Hygiène"></option>
+              <option value="Outillage & Quincaillerie"></option>
+              <option value="Panneaux solaires & Énergie"></option>
+              <option value="Moto & Tricycles"></option>
+              <option value="Générale (fret LCL / groupage)"></option>
+            </datalist>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="prospectBudget">Budget estimé (USD)</label>
+            <input type="text" id="prospectBudget" class="form-input" placeholder="Ex: $5,000 – $15,000" list="budgetList" autocomplete="off">
+            <datalist id="budgetList">
+              <option value="< $1,000"></option>
+              <option value="$1,000 – $5,000"></option>
+              <option value="$5,000 – $15,000"></option>
+              <option value="$15,000 – $30,000"></option>
+              <option value="$30,000 – $50,000"></option>
+              <option value="> $50,000"></option>
+            </datalist>
+          </div>
+        </div>
+
+        <!-- Row 4: Status + Date -->
+        <div class="admin-modal-grid-2">
+          <div class="form-group">
+            <label class="form-label" for="prospectStatus">Statut CRM</label>
+            <select id="prospectStatus" class="form-input">
+              <option value="nouveau">🔵 Nouveau</option>
+              <option value="contacte">🟡 Contacté</option>
+              <option value="qualifie">🟢 Qualifié</option>
+              <option value="converti">✅ Converti (Commande)</option>
+              <option value="perdu">🔴 Perdu</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="prospectDate">Date d'entrée</label>
+            <input type="text" id="prospectDate" class="form-input" placeholder="JJ/MM/AAAA" autocomplete="off">
+          </div>
+        </div>
+
+        <!-- Notes -->
+        <div class="form-group">
+          <label class="form-label" for="prospectNotes">Notes internes</label>
+          <textarea id="prospectNotes" class="form-input" rows="2" placeholder="Informations complémentaires sur le client, ses besoins, son historique..." style="resize:vertical; min-height:64px;"></textarea>
+        </div>
+
+        <div class="admin-modal-footer">
+          <button type="button" id="cancelProspectModal" class="btn btn--secondary">Annuler</button>
+          <button type="button" id="btnProspectConvertOrder" class="btn btn--outline" style="border-color:var(--gold); color:var(--gold); display:none;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+            Convertir en commande
+          </button>
+          <button type="submit" class="btn btn--primary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            Enregistrer
+          </button>
         </div>
       </form>
     </div>

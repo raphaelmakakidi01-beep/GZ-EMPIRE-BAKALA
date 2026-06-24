@@ -318,8 +318,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const dashboardBody = document.getElementById('prospectsTableBody');
       if (dashboardBody) {
         dashboardBody.innerHTML = '';
-        prospects.slice(0, 5).forEach(p => {
-          dashboardBody.appendChild(createProspectRow(p, false));
+        prospects.slice(0, 5).forEach((p, i) => {
+          dashboardBody.appendChild(createProspectRow(p, false, i));
         });
       }
 
@@ -327,8 +327,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const fullBody = document.getElementById('fullProspectsTableBody');
       if (fullBody) {
         fullBody.innerHTML = '';
-        prospects.forEach(p => {
-          fullBody.appendChild(createProspectRow(p, true));
+        prospects.forEach((p, i) => {
+          const row = createProspectRow(p, true, i);
+          fullBody.appendChild(row);
         });
       }
 
@@ -391,7 +392,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  function createProspectRow(p, isFull) {
+  function createProspectRow(p, isFull, index) {
     const tr = document.createElement('tr');
     
     // Status color mapping
@@ -429,8 +430,10 @@ document.addEventListener('DOMContentLoaded', () => {
       <td>${escapeHTML(p.date)}</td>
       <td>
         <div style="display:flex; gap:6px;">
-          <button class="admin-action-btn admin-action-btn--view" title="Voir détails" onclick="alert('Détails Prospect:\\n\\nNom: ${escapeQuotes(p.name)}\\nEmail: ${escapeQuotes(p.email)}\\nPhone: ${escapeQuotes(p.phone || '-')}\\nPays: ${escapeQuotes(p.country)}\\nProduit: ${escapeQuotes(p.product)}\\nBudget: ${escapeQuotes(p.budget || '-')}')" style="display:flex; align-items:center; justify-content:center; width:30px; height:30px; padding:0;"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></button>
+          <button class="admin-action-btn admin-action-btn--edit" title="Éditer" data-index="${index}" style="display:flex; align-items:center; justify-content:center; width:30px; height:30px; padding:0;"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg></button>
+          <button class="admin-action-btn admin-action-btn--convert" title="Convertir en Commande" data-index="${index}" style="display:flex; align-items:center; justify-content:center; width:30px; height:30px; padding:0; color: #10B981;"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></button>
           <button class="admin-action-btn admin-action-btn--whatsapp" title="WhatsApp" onclick="window.open('https://wa.me/${p.phone ? p.phone.replace(/[^0-9]/g, '') : '8618320050031'}')" style="display:flex; align-items:center; justify-content:center; width:30px; height:30px; padding:0;"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></button>
+          <button class="admin-action-btn admin-action-btn--delete" title="Supprimer" data-index="${index}" style="display:flex; align-items:center; justify-content:center; width:30px; height:30px; padding:0; color: #EF4444;"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
         </div>
       </td>
     `;
@@ -451,6 +454,189 @@ document.addEventListener('DOMContentLoaded', () => {
     const s = String(str);
     return s.replace(/'/g, "\\'").replace(/"/g, '\\"');
   }
+
+  // ─── PROSPECT MODAL (Add / Edit / Convert / Delete) ───
+  const prospectModal = document.getElementById('prospectModal');
+  const prospectForm = document.getElementById('prospectForm');
+
+  function openProspectModal(p, idx) {
+    if (!prospectModal) return;
+    const isEdit = p !== null;
+    document.getElementById('modalProspectTitle').textContent = isEdit ? 'Modifier le Prospect' : 'Nouveau Prospect';
+    document.getElementById('editProspectIndex').value = isEdit ? (idx !== undefined ? idx : '') : '';
+
+    // Auto-fill fields from prospect data (or blank for new)
+    document.getElementById('prospectName').value = isEdit ? (p.name || '') : '';
+    document.getElementById('prospectEmail').value = isEdit ? (p.email || '') : '';
+    document.getElementById('prospectPhone').value = isEdit ? (p.phone || '') : '';
+    document.getElementById('prospectCountry').value = isEdit ? (p.country || '') : '';
+    document.getElementById('prospectProduct').value = isEdit ? (p.product || '') : '';
+    document.getElementById('prospectBudget').value = isEdit ? (p.budget || '') : '';
+    document.getElementById('prospectStatus').value = isEdit ? (p.status || 'nouveau') : 'nouveau';
+    document.getElementById('prospectDate').value = isEdit ? (p.date || '') : new Date().toLocaleDateString('fr-FR');
+    document.getElementById('prospectNotes').value = isEdit ? (p.notes || '') : '';
+
+    // Populate datalist suggestions from existing prospects
+    const nameDl = document.getElementById('prospectNameSuggestions');
+    const emailDl = document.getElementById('prospectEmailSuggestions');
+    if (nameDl) {
+      nameDl.innerHTML = prospects.map(pr => `<option value="${escapeHTML(pr.name)}"></option>`).join('');
+    }
+    if (emailDl) {
+      emailDl.innerHTML = prospects.map(pr => `<option value="${escapeHTML(pr.email)}"></option>`).join('');
+    }
+
+    // Show/hide convert button
+    const convertBtn = document.getElementById('btnProspectConvertOrder');
+    if (convertBtn) convertBtn.style.display = isEdit ? 'inline-flex' : 'none';
+
+    // Update hint
+    const hint = document.getElementById('prospectAutoFillHint');
+    if (hint) {
+      hint.textContent = isEdit
+        ? `\u270f\ufe0f Modification de ${p.name} — champs pré-remplis automatiquement.`
+        : '\u2139\ufe0f Saisissez l\'email pour activer le remplissage automatique depuis les prospects existants.';
+    }
+
+    prospectModal.style.display = 'flex';
+  }
+
+  function closeProspectModal() {
+    if (prospectModal) prospectModal.style.display = 'none';
+  }
+
+  function deleteProspect(idx) {
+    const p = prospects[idx];
+    if (!p) return;
+    if (!confirm(`Supprimer le prospect "${p.name}" ?`)) return;
+    prospects.splice(idx, 1);
+    localStorage.setItem('gz-empire-prospects', JSON.stringify(prospects));
+    loadProspectsData();
+  }
+
+  function convertProspectToOrder(p) {
+    // Pre-fill the order modal from prospect data
+    const orderTab = document.querySelector('.admin-nav-item[data-tab="orders"]');
+    if (orderTab) orderTab.click();
+    setTimeout(() => {
+      const modalTitle = document.getElementById('modalOrderTitle');
+      const orderRef = document.getElementById('orderRef');
+      const orderClient = document.getElementById('orderClient');
+      const orderProduct = document.getElementById('orderProduct');
+      const orderAmount = document.getElementById('orderAmount');
+      const orderModal = document.getElementById('orderModal');
+      if (modalTitle) modalTitle.textContent = 'Nouvelle commande (depuis prospect)';
+      if (orderRef) orderRef.value = 'GZ-' + new Date().getFullYear() + '-' + String(Date.now()).slice(-4);
+      if (orderClient) orderClient.value = p.name || '';
+      if (orderProduct) orderProduct.value = p.product || '';
+      if (orderAmount) orderAmount.value = p.budget || '';
+      if (orderModal) orderModal.style.display = 'flex';
+      // Mark prospect as converted
+      const idx = prospects.findIndex(pr => pr.email === p.email);
+      if (idx !== -1) {
+        prospects[idx].status = 'converti';
+        localStorage.setItem('gz-empire-prospects', JSON.stringify(prospects));
+        loadProspectsData();
+      }
+    }, 350);
+    closeProspectModal();
+  }
+
+  // Open modal for new prospect
+  const btnAddNewProspect = document.getElementById('btnAddNewProspect');
+  if (btnAddNewProspect) {
+    btnAddNewProspect.addEventListener('click', () => openProspectModal(null));
+  }
+
+  // Close modal buttons
+  const closeProspectModalBtn = document.getElementById('closeProspectModal');
+  const cancelProspectModalBtn = document.getElementById('cancelProspectModal');
+  if (closeProspectModalBtn) closeProspectModalBtn.addEventListener('click', closeProspectModal);
+  if (cancelProspectModalBtn) cancelProspectModalBtn.addEventListener('click', closeProspectModal);
+  if (prospectModal) {
+    prospectModal.addEventListener('click', (e) => { if (e.target === prospectModal) closeProspectModal(); });
+  }
+
+  // Auto-fill: when email is typed, find matching prospect and fill fields
+  const prospectEmailInput = document.getElementById('prospectEmail');
+  if (prospectEmailInput) {
+    prospectEmailInput.addEventListener('change', () => {
+      const val = prospectEmailInput.value.trim().toLowerCase();
+      const existing = prospects.find(pr => pr.email && pr.email.toLowerCase() === val);
+      if (existing && !document.getElementById('editProspectIndex').value) {
+        // Auto-fill from existing prospect
+        if (!document.getElementById('prospectName').value) document.getElementById('prospectName').value = existing.name || '';
+        if (!document.getElementById('prospectPhone').value) document.getElementById('prospectPhone').value = existing.phone || '';
+        if (!document.getElementById('prospectCountry').value) document.getElementById('prospectCountry').value = existing.country || '';
+        if (!document.getElementById('prospectProduct').value) document.getElementById('prospectProduct').value = existing.product || '';
+        if (!document.getElementById('prospectBudget').value) document.getElementById('prospectBudget').value = existing.budget || '';
+        const hint = document.getElementById('prospectAutoFillHint');
+        if (hint) hint.textContent = `\u2705 Données de ${existing.name} chargées automatiquement.`;
+      }
+    });
+  }
+
+  // Convert button inside modal
+  const btnProspectConvertOrder = document.getElementById('btnProspectConvertOrder');
+  if (btnProspectConvertOrder) {
+    btnProspectConvertOrder.addEventListener('click', () => {
+      const idx = document.getElementById('editProspectIndex').value;
+      const p = idx !== '' ? prospects[parseInt(idx)] : null;
+      if (p) convertProspectToOrder(p);
+    });
+  }
+
+  // Save prospect form
+  if (prospectForm) {
+    prospectForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const idx = document.getElementById('editProspectIndex').value;
+      const prospectData = {
+        name: document.getElementById('prospectName').value.trim(),
+        email: document.getElementById('prospectEmail').value.trim().toLowerCase(),
+        phone: document.getElementById('prospectPhone').value.trim(),
+        country: document.getElementById('prospectCountry').value.trim(),
+        product: document.getElementById('prospectProduct').value.trim(),
+        budget: document.getElementById('prospectBudget').value.trim(),
+        status: document.getElementById('prospectStatus').value,
+        date: document.getElementById('prospectDate').value.trim() || new Date().toLocaleDateString('fr-FR'),
+        notes: document.getElementById('prospectNotes').value.trim()
+      };
+      if (!prospectData.name || !prospectData.email) return;
+
+      if (idx !== '') {
+        prospects[parseInt(idx)] = prospectData;
+      } else {
+        prospects.unshift(prospectData);
+      }
+      localStorage.setItem('gz-empire-prospects', JSON.stringify(prospects));
+      closeProspectModal();
+      loadProspectsData();
+    });
+  }
+
+  // Event delegation for Edit / Convert / Delete buttons in the prospect tables
+  function attachProspectTableDelegation(bodyId) {
+    const body = document.getElementById(bodyId);
+    if (!body) return;
+    body.addEventListener('click', (e) => {
+      const editBtn = e.target.closest('.admin-action-btn--edit');
+      const convertBtn = e.target.closest('.admin-action-btn--convert');
+      const deleteBtn = e.target.closest('.admin-action-btn--delete');
+      if (editBtn) {
+        const idx = parseInt(editBtn.dataset.index);
+        openProspectModal(prospects[idx], idx);
+      } else if (convertBtn) {
+        const idx = parseInt(convertBtn.dataset.index);
+        convertProspectToOrder(prospects[idx]);
+      } else if (deleteBtn) {
+        const idx = parseInt(deleteBtn.dataset.index);
+        deleteProspect(idx);
+      }
+    });
+  }
+  attachProspectTableDelegation('fullProspectsTableBody');
+  attachProspectTableDelegation('prospectsTableBody');
 
   function parseDateStr(str) {
     if (!str) return null;
