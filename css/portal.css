@@ -472,16 +472,16 @@
   max-width: 400px;
   overflow: hidden;
   pointer-events: none;
-  mask-image: linear-gradient(to left, rgba(0, 0, 0, 0.4) 60%, rgba(0, 0, 0, 0) 100%);
-  -webkit-mask-image: linear-gradient(to left, rgba(0, 0, 0, 0.4) 60%, rgba(0, 0, 0, 0) 100%);
+  mask-image: linear-gradient(to left, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0) 100%);
+  -webkit-mask-image: linear-gradient(to left, rgba(0, 0, 0, 1) 50%, rgba(0, 0, 0, 0) 100%);
 }
 
 .hero-image-corner img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.35;
-  filter: grayscale(10%) contrast(110%);
+  opacity: 1;
+  filter: contrast(110%);
 }
 
 .dashboard__hero-text {
