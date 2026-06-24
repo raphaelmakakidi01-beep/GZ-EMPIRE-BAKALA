@@ -20,6 +20,10 @@
     };
   }
 
+  // IIFE-wide data structures
+  let prospects = [];
+  let chats = [];
+
   // ─── DATA MIGRATION v3.0 ───
   // Purge all old fake demo data on first run of the new version
   const DATA_VERSION = 'gz-empire-data-v3';
@@ -283,7 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       // Check if we already have prospects in localStorage
       let storedProspects = localStorage.getItem('gz-empire-prospects');
-      let prospects = [];
+      prospects = [];
 
       if (!storedProspects) {
         prospects = defaultProspects;
@@ -1271,7 +1275,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function loadChatsData() {
     try {
       let storedChats = localStorage.getItem('gz-empire-chats');
-      let chats = [];
+      chats = [];
 
       if (!storedChats) {
         chats = defaultChats;
