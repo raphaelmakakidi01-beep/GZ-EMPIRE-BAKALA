@@ -605,6 +605,74 @@ document.addEventListener('DOMContentLoaded', () => {
     previewContainer.classList.add('hidden');
   };
 
+  function showPortalAlert(title, message, iconType = 'success') {
+    const modal = document.getElementById('customAlertModal');
+    const titleEl = document.getElementById('customAlertTitle');
+    const msgEl = document.getElementById('customAlertMessage');
+    const iconWrapper = modal ? modal.querySelector('.custom-alert-icon') : null;
+
+    if (!modal || !titleEl || !msgEl) return;
+
+    titleEl.textContent = title;
+    msgEl.textContent = message;
+
+    // Define icons
+    let iconHtml = '';
+    let iconColor = 'var(--gold)';
+    let iconBg = 'rgba(212, 175, 55, 0.1)';
+    let iconBorder = 'var(--gold)';
+
+    if (iconType === 'success') {
+      iconHtml = `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`;
+      iconColor = 'var(--gold)';
+      iconBg = 'rgba(212, 175, 55, 0.1)';
+      iconBorder = 'var(--gold)';
+    } else if (iconType === 'info') {
+      iconHtml = `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="16" y2="12"/><line x1="12" x2="12.01" y1="8" y2="8"/></svg>`;
+      iconColor = '#3B82F6';
+      iconBg = 'rgba(59, 130, 246, 0.1)';
+      iconBorder = '#3B82F6';
+    } else if (iconType === 'download') {
+      iconHtml = `<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>`;
+      iconColor = '#10B981';
+      iconBg = 'rgba(16, 185, 129, 0.1)';
+      iconBorder = '#10B981';
+    }
+
+    if (iconWrapper) {
+      iconWrapper.innerHTML = iconHtml;
+      iconWrapper.style.color = iconColor;
+      iconWrapper.style.background = iconBg;
+      iconWrapper.style.borderColor = iconBorder;
+    }
+
+    // Show modal with animation
+    modal.style.display = 'flex';
+    // Force reflow
+    modal.offsetHeight;
+    modal.style.opacity = '1';
+    
+    const card = modal.querySelector('.custom-alert-card');
+    if (card) {
+      card.style.transform = 'scale(1)';
+    }
+
+    // Set close handler
+    const closeBtn = document.getElementById('customAlertCloseBtn');
+    const closeFn = () => {
+      modal.style.opacity = '0';
+      if (card) card.style.transform = 'scale(0.9)';
+      setTimeout(() => {
+        modal.style.display = 'none';
+      }, 300);
+      closeBtn.removeEventListener('click', closeFn);
+    };
+    closeBtn.addEventListener('click', closeFn);
+  }
+
+  // Make it global
+  window.showPortalAlert = showPortalAlert;
+
   window.submitBookingForm = function() {
     const reason = document.getElementById('bookingReason').value;
     const cities = document.getElementById('bookingCities').value;
@@ -639,7 +707,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Reset Form
     document.getElementById('bookingForm').reset();
-    alert("Votre demande de réservation d'accompagnement a été soumise avec succès. Notre équipe vous contactera dans les plus brefs délais.");
+    showPortalAlert("Demande Reçue", "Votre demande de réservation d'accompagnement a été soumise avec succès. Notre équipe vous contactera dans les plus brefs délais.", "success");
   };
 
   window.submitPurchasingForm = function() {
@@ -670,13 +738,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Reset Form
     document.getElementById('purchasingForm').reset();
     window.removeProductPhoto();
-    alert("Votre demande d'achat direct a été transmise. Nos acheteurs négocient le meilleur prix auprès des fournisseurs chinois.");
+    showPortalAlert("Demande Transmise", "Votre demande d'achat direct a été transmise. Nos acheteurs négocient le meilleur prix auprès des fournisseurs chinois.", "success");
   };
 
   window.downloadInvoiceMock = function() {
     const input = document.getElementById('shipmentSearchInput');
     const ref = input ? input.value.trim().toUpperCase() : '';
-    alert(`Téléchargement de la facture INV-${ref || 'EXP'} au format PDF...`);
+    showPortalAlert("Téléchargement", `Téléchargement de la facture INV-${ref || 'EXP'} au format PDF...`, "download");
   };
 
   // ─── NOTIFICATIONS DROPDOWN ENGINE ───

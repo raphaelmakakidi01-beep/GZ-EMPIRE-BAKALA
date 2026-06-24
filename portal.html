@@ -548,7 +548,7 @@
                       <h4 class="doc-item__title" id="packingListName">Packing List PL-2024-001</h4>
                       <span class="doc-item__meta" id="packingListMeta">Taille : 185 KB · Générée le 09/06/2026</span>
                     </div>
-                    <button class="doc-item__download" onclick="alert('Téléchargement de la Packing List PL...')" aria-label="Télécharger la packing list">
+                    <button class="doc-item__download" onclick="showPortalAlert('Téléchargement', 'Téléchargement de la Packing List au format Excel...', 'download')" aria-label="Télécharger la packing list">
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
                     </button>
                   </div>
@@ -621,6 +621,18 @@
     <div style="position: relative; max-width: 90%; max-height: 90%; z-index: 2100;">
       <img id="lightboxImg" src="" alt="Aperçu grand format" style="max-width: 100%; max-height: 85vh; border-radius: 12px; border: 1px solid rgba(255,255,255,0.15); box-shadow: 0 24px 80px rgba(0,0,0,0.8); display: block;">
       <button id="closeLightboxBtn" style="position: absolute; top: -42px; right: 0; color: white; background: none; border: none; font-size: 28px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; transition: color 0.2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='white'">✕</button>
+    </div>
+  </div>
+
+  <!-- Custom Premium Alert Modal -->
+  <div id="customAlertModal" class="custom-alert-modal">
+    <div class="custom-alert-card">
+      <div class="custom-alert-icon">
+        <!-- SVG injected dynamically -->
+      </div>
+      <h3 id="customAlertTitle" class="custom-alert-title">Succès</h3>
+      <p id="customAlertMessage" class="custom-alert-message"></p>
+      <button id="customAlertCloseBtn" class="btn btn--primary" style="padding: 10px var(--space-8); font-size: 0.85rem; font-weight: 600; min-width: 120px; border-radius: 8px;">OK</button>
     </div>
   </div>
 

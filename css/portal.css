@@ -969,6 +969,51 @@
   to { transform: scale(1); }
 }
 
+/* ─── Custom Premium Alert Modal ─── */
+.custom-alert-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(5, 8, 24, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.custom-alert-card {
+  background: #0A0F24;
+  border: 1.5px solid rgba(212, 175, 55, 0.2);
+  border-radius: 16px;
+  width: 90%;
+  max-width: 440px;
+  padding: var(--space-6);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+  transform: scale(0.9);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  text-align: center;
+  color: white;
+}
+
+.custom-alert-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(212, 175, 55, 0.1);
+  border: 1.5px solid var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--space-4) auto;
+  color: var(--gold);
+  transition: all 0.2s ease;
+}
+
 /* ─── Header Notifications Dropdown ─── */
 .header-notif-item {
   display: flex;
