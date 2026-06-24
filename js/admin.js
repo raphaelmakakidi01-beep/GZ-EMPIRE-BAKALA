@@ -1572,6 +1572,110 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // ─── CLIENT ACCESS CODES MANAGEMENT ───
+  // Génération, affichage et suppression des codes d'accès pour clients sans conteneur
+
+  function generateClientCode() {
+    const adjectives = ['GOLD', 'PRIME', 'PLUS', 'VIP', 'PRO'];
+    const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
+    const num = Math.floor(1000 + Math.random() * 9000);
+    return `GZ-${adj}-${num}`;
+  }
+
+  function loadClientAccessCodes() {
+    try {
+      const codes = JSON.parse(localStorage.getItem('gz-empire-client-codes') || '[]');
+      const listEl = document.getElementById('clientAccessCodesList');
+      if (!listEl) return;
+      listEl.innerHTML = '';
+      if (codes.length === 0) {
+        listEl.innerHTML = '<p style="font-size:12px; color:rgba(255,255,255,0.3); text-align:center; padding: var(--space-4) 0;">Aucun code client créé pour l\'instant.</p>';
+        return;
+      }
+      codes.forEach((c, idx) => {
+        const row = document.createElement('div');
+        row.style.cssText = 'display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.07); border-radius:10px; padding: 12px 16px; gap:12px;';
+        row.innerHTML = `
+          <div style="flex:1; min-width:0;">
+            <div style="font-weight:700; color:var(--gold); font-size:13px; letter-spacing:0.05em;">${escapeHTML(c.code)}</div>
+            <div style="font-size:11px; color:rgba(255,255,255,0.5); margin-top:2px;">${escapeHTML(c.name)} &mdash; ${escapeHTML(c.email)}</div>
+            <div style="font-size:10px; color:rgba(255,255,255,0.3); margin-top:2px;">Créé le ${escapeHTML(c.date || '?')}</div>
+          </div>
+          <div style="display:flex; gap:6px; flex-shrink:0;">
+            <button class="admin-action-btn admin-action-btn--view" title="Copier le code" data-code="${escapeHTML(c.code)}" onclick="navigator.clipboard.writeText('${escapeHTML(c.code)}').then(()=>{ this.title='Copié !'; setTimeout(()=>{this.title='Copier le code';},2000); })" style="display:flex; align-items:center; justify-content:center; width:30px; height:30px; padding:0;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+            </button>
+            <button class="admin-action-btn" style="background:rgba(239,68,68,0.1); color:#EF4444; border:none; border-radius:6px; width:30px; height:30px; padding:0; cursor:pointer; display:flex; align-items:center; justify-content:center;" title="Supprimer" data-delete-idx="${idx}">
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+            </button>
+          </div>
+        `;
+        // Delete handler
+        row.querySelector('[data-delete-idx]').addEventListener('click', () => {
+          const allCodes = JSON.parse(localStorage.getItem('gz-empire-client-codes') || '[]');
+          allCodes.splice(idx, 1);
+          localStorage.setItem('gz-empire-client-codes', JSON.stringify(allCodes));
+          loadClientAccessCodes();
+        });
+        listEl.appendChild(row);
+      });
+    } catch (e) { console.error('Error loading client access codes:', e); }
+  }
+
+  const btnGenerateCode = document.getElementById('btnGenerateCode');
+  const accessClientCode = document.getElementById('accessClientCode');
+  if (btnGenerateCode && accessClientCode) {
+    btnGenerateCode.addEventListener('click', () => {
+      accessClientCode.value = generateClientCode();
+    });
+    // Auto-generate a code on tab open if empty
+    if (!accessClientCode.value) accessClientCode.value = generateClientCode();
+  }
+
+  const clientAccessForm = document.getElementById('clientAccessForm');
+  if (clientAccessForm) {
+    clientAccessForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('accessClientName').value.trim();
+      const email = document.getElementById('accessClientEmail').value.trim().toLowerCase();
+      const code = document.getElementById('accessClientCode').value.trim().toUpperCase();
+      if (!name || !email || !code) return;
+
+      try {
+        const codes = JSON.parse(localStorage.getItem('gz-empire-client-codes') || '[]');
+        // Check duplicate code
+        if (codes.some(c => c.code.toUpperCase() === code)) {
+          alert(`Le code "${code}" existe déjà. Générez-en un autre ou modifiez-le.`);
+          return;
+        }
+        codes.unshift({
+          code,
+          name,
+          email,
+          date: new Date().toLocaleDateString('fr-FR')
+        });
+        localStorage.setItem('gz-empire-client-codes', JSON.stringify(codes));
+        loadClientAccessCodes();
+
+        // Reset form
+        clientAccessForm.reset();
+        if (accessClientCode) accessClientCode.value = generateClientCode(); // Pre-fill next one
+        alert(`✅ Code d'accès "${code}" créé pour ${name}.\n\nPartagez ce code par WhatsApp ou email. Le client peut l'utiliser sur portal.html avec son adresse email.`);
+      } catch (err) {
+        console.error('Error saving client code:', err);
+      }
+    });
+    // Load existing codes when settings tab is opened
+    loadClientAccessCodes();
+  }
+
+  // Re-load codes list when settings tab is clicked
+  document.querySelectorAll('.admin-nav-item[data-tab="settings"]').forEach(el => {
+    el.addEventListener('click', () => {
+      setTimeout(loadClientAccessCodes, 100);
+    });
+  });
+
   // ─── QUICK ACTIONS HANDLERS ───
   const actionAddOrder = document.getElementById('actionAddOrder');
   if (actionAddOrder) {

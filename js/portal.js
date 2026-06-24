@@ -70,19 +70,30 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         if (submitBtn) submitBtn.classList.remove('loading');
 
-        // Validate: the code must match an existing container number in the system
+        // Validate: the code must match either:
+        // 1. An existing container number in the system (shipments)
+        // 2. An admin-generated client access code (gz-empire-client-codes)
         let storedShipments = [];
         try {
           storedShipments = JSON.parse(localStorage.getItem('gz-empire-shipments') || '[]');
         } catch (e) {}
 
-        const validContainer = storedShipments.some(s => s && s.container && s.container.toUpperCase() === enteredCode);
+        let clientCodes = [];
+        try {
+          clientCodes = JSON.parse(localStorage.getItem('gz-empire-client-codes') || '[]');
+        } catch (e) {}
 
-        if (validContainer) {
-          // Save login state with the container ref
+        const validContainer = storedShipments.some(s => s && s.container && s.container.toUpperCase() === enteredCode);
+        const validClientCode = clientCodes.some(c => c && c.code && c.code.toUpperCase() === enteredCode);
+        const isValid = validContainer || validClientCode;
+
+        if (isValid) {
+          // Save login state with the container ref or access code
           localStorage.setItem('gz-empire-user-logged', 'true');
           localStorage.setItem('gz-empire-user-email', enteredEmail);
           localStorage.setItem('gz-empire-user-container', enteredCode);
+          // Mark the type of access so the dashboard can adapt
+          localStorage.setItem('gz-empire-user-access-type', validContainer ? 'container' : 'client-code');
           if (loginView) loginView.classList.add('hidden');
           if (dashboardView) dashboardView.classList.remove('hidden');
           initializeDashboard();

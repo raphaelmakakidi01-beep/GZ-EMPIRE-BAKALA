@@ -56,7 +56,7 @@
         <div class="login-card__logo" style="display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: var(--space-6);">
           <img src="img/logo.png" alt="G.Z EMPIRE" class="logo-img" style="height: 70px; margin-bottom: var(--space-3);">
           <h1 class="login-title" style="font-size: 1.5rem; font-weight: 800; color: var(--navy); text-align:center;">Espace Client</h1>
-          <p class="login-subtitle" style="text-align:center; color: var(--gray-500); font-size:0.85rem; margin-top: 4px;">Connectez-vous avec votre email et votre numéro de conteneur</p>
+          <p class="login-subtitle" style="text-align:center; color: var(--gray-500); font-size:0.85rem; margin-top: 4px;">Connectez-vous avec votre email et votre code d'accès ou numéro de conteneur</p>
         </div>
 
         <!-- Login Form -->
@@ -70,22 +70,22 @@
             </div>
           </div>
 
-          <!-- Container Number -->
+          <!-- Container Number or Access Code -->
           <div class="form-group" style="margin:0;">
-            <label style="font-size:0.8rem; font-weight:600; color:var(--navy-700); display:block; margin-bottom:6px;">Numéro de conteneur</label>
+            <label style="font-size:0.8rem; font-weight:600; color:var(--navy-700); display:block; margin-bottom:6px;">Code d'accès ou Numéro de conteneur</label>
             <div class="login-input-wrapper">
               <svg class="login-input-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-              <input type="text" id="loginPassword" class="form-input login-input" placeholder="ex: GZEMP2025001" autocomplete="off" required style="text-transform:uppercase; letter-spacing:0.06em; background: #f8fafc; border: 1.5px solid #e2e8f0; color: var(--navy); font-weight: 600;">
+              <input type="text" id="loginPassword" class="form-input login-input" placeholder="ex: GZ-CLIENT-2026 ou GZEMP2025001" autocomplete="off" required style="text-transform:uppercase; letter-spacing:0.06em; background: #f8fafc; border: 1.5px solid #e2e8f0; color: var(--navy); font-weight: 600;">
             </div>
             <p style="font-size:0.72rem; color:#94a3b8; margin-top:5px; padding-left:2px;">
-              Votre référence conteneur vous a été communiquée par GZ-EMPIRE.
+              Code fourni par GZ-EMPIRE — ou votre numéro de conteneur si vous en avez un.
             </p>
           </div>
 
           <!-- Error message -->
           <div id="portalLoginError" style="display:none; background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.25); border-radius:8px; padding:10px 14px; color:#DC2626; font-size:0.82rem; align-items:center; gap:8px; border-left: 3px solid #EF4444;">
             <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>
-            Numéro de conteneur introuvable. Vérifiez votre référence ou contactez GZ-EMPIRE.
+            Code d'accès ou numéro de conteneur invalide. Vérifiez votre code ou contactez GZ-EMPIRE.
           </div>
 
           <!-- Login Button -->
