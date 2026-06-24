@@ -24,10 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Ensure default shipments are loaded in localStorage if empty
   if (!localStorage.getItem('gz-empire-shipments')) {
-    const defaultShipments = [
-      { container: "GZEMP2024001", origin: "Guangzhou (Port)", destination: "Pointe-Noire (Port)", carrier: "COSCO Shipping", departure: "15/03/2024", eta: "28/04/2024", status: "transit", update: "Il y a 2h" },
-      { container: "GZEMP2024002", origin: "Guangzhou (Port)", destination: "Abidjan (Port)", carrier: "Maersk Line", departure: "20/03/2024", eta: "05/05/2024", status: "production", update: "Il y a 1 jour" }
-    ];
+    const defaultShipments = [];
     localStorage.setItem('gz-empire-shipments', JSON.stringify(defaultShipments));
   }
 

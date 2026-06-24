@@ -20,13 +20,13 @@
     };
   }
 
-  // ─── DATA MIGRATION v2.0 ───
-  const DATA_VERSION = 'gz-empire-data-v2';
+  // ─── DATA MIGRATION v3.0 ───
+  const DATA_VERSION = 'gz-empire-data-v3';
   if (localStorage.getItem(DATA_VERSION) !== 'true') {
     ['gz-empire-prospects','gz-empire-shipments','gz-empire-chats',
-     'gz-empire-portal-notifications','gz-empire-user-logged','gz-empire-admin-logged'
+     'gz-empire-portal-notifications','gz-empire-user-logged','gz-empire-admin-logged','gz-empire-orders'
     ].forEach(key => localStorage.removeItem(key));
-    ['GZEMP2024001', 'GZEMP2024002'].forEach(id => {
+    ['GZEMP2024001', 'GZEMP2024002', 'GZ-2024-001', 'GZ-2024-002', 'GZ-2024-003'].forEach(id => {
       localStorage.removeItem(`gz-empire-shipment-status-${id}`);
       localStorage.removeItem(`gz-empire-shipment-photo-${id}`);
     });
@@ -239,6 +239,17 @@ document.addEventListener('DOMContentLoaded', () => {
       if (currentDateEl) {
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
         currentDateEl.textContent = new Date().toLocaleDateString('fr-FR', options);
+      }
+
+      // Dynamic greeting
+      const greetingEl = document.querySelector('.dashboard__greeting');
+      if (greetingEl) {
+        const containerCode = localStorage.getItem('gz-empire-user-container') || '';
+        if (containerCode) {
+          greetingEl.textContent = `Bonjour, Client [${containerCode}]`;
+        } else {
+          greetingEl.textContent = `Bonjour, Client`;
+        }
       }
 
       // Default to shipments tab since it's the core visual tracking tab

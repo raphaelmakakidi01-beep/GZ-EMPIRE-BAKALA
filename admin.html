@@ -212,7 +212,7 @@
                 </div>
                 <div class="admin-stat-card__trend admin-stat-card__trend--up">+8%</div>
               </div>
-              <div class="admin-stat-card__value">23</div>
+              <div class="admin-stat-card__value" id="statActiveOrdersCount">0</div>
               <div class="admin-stat-card__label">Commandes actives</div>
             </div>
 
@@ -223,7 +223,7 @@
                 </div>
                 <div class="admin-stat-card__trend admin-stat-card__trend--up">+18%</div>
               </div>
-              <div class="admin-stat-card__value">$125K</div>
+              <div class="admin-stat-card__value" id="statTotalRevenueValue">$0</div>
               <div class="admin-stat-card__label">Volume d'affaires (Mois)</div>
             </div>
 
@@ -522,6 +522,12 @@
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
                 Gestion des Commandes Clients
               </div>
+              <div style="display:flex; gap: 8px;">
+                <button class="btn btn--primary btn--sm" id="btnAddNewOrder" style="font-size:12px; padding:6px 14px;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+                  Ajouter
+                </button>
+              </div>
             </div>
             <div style="padding: 0 var(--space-5) var(--space-4);">
               <p style="color:rgba(255,255,255,0.35); font-size:13px; padding-top:var(--space-3);">Vue d'ensemble sur le statut de production, de facturation et de validation qualité.</p>
@@ -539,34 +545,8 @@
                     <th>Actions</th>
                   </tr>
                 </thead>
-                <tbody>
-                  <tr>
-                    <td>GZ-2024-001</td>
-                    <td>Jean-Baptiste</td>
-                    <td>Électronique (40' HC)</td>
-                    <td><span class="status-badge status-badge--qualifie">En Transit</span></td>
-                    <td>$12,500</td>
-                    <td><span style="color:#10B981; font-weight:700">Payé</span></td>
-                    <td><button class="admin-action-btn admin-action-btn--edit" aria-label="Modifier"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg></button></td>
-                  </tr>
-                  <tr>
-                    <td>GZ-2024-002</td>
-                    <td>Marc-Antoine</td>
-                    <td>Textile de maison</td>
-                    <td><span class="status-badge status-badge--contacte">Production</span></td>
-                    <td>$8,200</td>
-                    <td><span style="color:#F59E0B; font-weight:700">Acompte</span></td>
-                    <td><button class="admin-action-btn admin-action-btn--edit" aria-label="Modifier"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg></button></td>
-                  </tr>
-                  <tr>
-                    <td>GZ-2024-003</td>
-                    <td>Amina K.</td>
-                    <td>Mobilier Bureau (20' GP)</td>
-                    <td><span class="status-badge status-badge--converti">Livré</span></td>
-                    <td>$15,800</td>
-                    <td><span style="color:#10B981; font-weight:700">Payé</span></td>
-                    <td><button class="admin-action-btn admin-action-btn--edit" aria-label="Modifier"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg></button></td>
-                  </tr>
+                <tbody id="adminOrdersTableBody">
+                  <!-- Loaded dynamically from localStorage -->
                 </tbody>
               </table>
             </div>
@@ -597,7 +577,7 @@
                 </div>
                 <div class="admin-stat-card__trend admin-stat-card__trend--up">+5.4%</div>
               </div>
-              <div class="admin-stat-card__value">94.2%</div>
+              <div class="admin-stat-card__value" id="statSourcingSuccess">94.2%</div>
               <div class="admin-stat-card__label">Sourcing réussi</div>
             </div>
 
@@ -608,7 +588,7 @@
                 </div>
                 <div class="admin-stat-card__trend admin-stat-card__trend--up">32.4 j</div>
               </div>
-              <div class="admin-stat-card__value">32.4 j</div>
+              <div class="admin-stat-card__value" id="statAvgTransitTime">32.4 j</div>
               <div class="admin-stat-card__label">Temps de transit moyen</div>
             </div>
 
@@ -619,7 +599,7 @@
                 </div>
                 <div class="admin-stat-card__trend admin-stat-card__trend--up">+15%</div>
               </div>
-              <div class="admin-stat-card__value">92%</div>
+              <div class="admin-stat-card__value" id="statEngagementRate">92%</div>
               <div class="admin-stat-card__label">Taux d'engagement Support</div>
             </div>
 
@@ -630,7 +610,7 @@
                 </div>
                 <div class="admin-stat-card__trend admin-stat-card__trend--up">+25%</div>
               </div>
-              <div class="admin-stat-card__value">142 CBM</div>
+              <div class="admin-stat-card__value" id="statTotalVolume">142 CBM</div>
               <div class="admin-stat-card__label">Volume expédié (30j)</div>
             </div>
           </div>
@@ -777,6 +757,69 @@
         
         <div class="admin-modal-footer">
           <button type="button" id="cancelShipmentModal" class="btn btn--secondary">Annuler</button>
+          <button type="submit" class="btn btn--primary">Sauvegarder</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <!-- Modal: Ajouter / Modifier une commande -->
+  <div id="orderModal" class="admin-modal" style="display: none;">
+    <div class="admin-modal-content">
+      <div class="admin-modal-header">
+        <h3 id="modalOrderTitle" class="admin-modal-title">Ajouter une commande</h3>
+        <button id="closeOrderModal" class="admin-modal-close" type="button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <form id="orderForm">
+        <!-- Hidden input for edit mode -->
+        <input type="hidden" id="editOrderIndex" value="">
+        
+        <div class="admin-modal-grid-2">
+          <div class="form-group">
+            <label class="form-label" for="orderRef">Référence Commande *</label>
+            <input type="text" id="orderRef" class="form-input" placeholder="GZ-2026-001" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="orderClient">Nom du Client *</label>
+            <input type="text" id="orderClient" class="form-input" placeholder="Ex: Jean Dupont" required>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="orderProduct">Produit Sourced *</label>
+          <input type="text" id="orderProduct" class="form-input" placeholder="Ex: Électronique (40' HC)" required>
+        </div>
+        
+        <div class="admin-modal-grid-2">
+          <div class="form-group">
+            <label class="form-label" for="orderAmount">Montant ($) *</label>
+            <input type="text" id="orderAmount" class="form-input" placeholder="Ex: 12,500" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="orderPayment">Statut Paiement</label>
+            <select id="orderPayment" class="form-input">
+              <option value="Payé">Payé</option>
+              <option value="Acompte">Acompte</option>
+              <option value="Non Payé">Non Payé</option>
+            </select>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="orderStatus">Statut Production</label>
+          <select id="orderStatus" class="form-input">
+            <option value="qualifie">En Transit / En cours</option>
+            <option value="contacte">Production</option>
+            <option value="converti">Livré</option>
+            <option value="nouveau">Nouveau</option>
+            <option value="perdu">Annulé</option>
+          </select>
+        </div>
+        
+        <div class="admin-modal-footer">
+          <button type="button" id="cancelOrderModal" class="btn btn--secondary">Annuler</button>
           <button type="submit" class="btn btn--primary">Sauvegarder</button>
         </div>
       </form>

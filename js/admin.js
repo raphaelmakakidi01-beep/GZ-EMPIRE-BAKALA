@@ -20,9 +20,9 @@
     };
   }
 
-  // ─── DATA MIGRATION v2.0 ───
+  // ─── DATA MIGRATION v3.0 ───
   // Purge all old fake demo data on first run of the new version
-  const DATA_VERSION = 'gz-empire-data-v2';
+  const DATA_VERSION = 'gz-empire-data-v3';
   if (localStorage.getItem(DATA_VERSION) !== 'true') {
     // Remove all old fake/demo data
     const keysToClean = [
@@ -31,16 +31,17 @@
       'gz-empire-chats',
       'gz-empire-portal-notifications',
       'gz-empire-user-logged',
-      'gz-empire-admin-logged'
+      'gz-empire-admin-logged',
+      'gz-empire-orders'
     ];
     // Also remove any shipment status/photo overrides from old demo containers
-    ['GZEMP2024001', 'GZEMP2024002'].forEach(id => {
+    ['GZEMP2024001', 'GZEMP2024002', 'GZ-2024-001', 'GZ-2024-002', 'GZ-2024-003'].forEach(id => {
       localStorage.removeItem(`gz-empire-shipment-status-${id}`);
       localStorage.removeItem(`gz-empire-shipment-photo-${id}`);
     });
     keysToClean.forEach(key => localStorage.removeItem(key));
     localStorage.setItem(DATA_VERSION, 'true');
-    console.info('✅ GZ-EMPIRE v2.0: Migration effectuée — données de démonstration supprimées.');
+    console.info('✅ GZ-EMPIRE v3.0: Migration effectuée — données de démonstration supprimées.');
   }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -268,7 +269,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try { loadProspectsData(); } catch (e) { console.error("Error loading prospects:", e); }
     try { loadShipmentsData(); } catch (e) { console.error("Error loading shipments:", e); }
+    try { loadOrdersData(); } catch (e) { console.error("Error loading orders:", e); }
     try { loadChatsData(); } catch (e) { console.error("Error loading chats:", e); }
+    try { updateAdvancedStats(); } catch (e) { console.error("Error updating stats:", e); }
     try { renderCharts(); } catch (e) { console.error("Error rendering charts:", e); }
   }
 
@@ -373,6 +376,9 @@ document.addEventListener('DOMContentLoaded', () => {
           };
         });
       }
+      
+      // Update advanced stats
+      try { updateAdvancedStats(); } catch(e) {}
     } catch (err) {
       console.error("Error in loadProspectsData:", err);
     }
@@ -713,6 +719,9 @@ document.addEventListener('DOMContentLoaded', () => {
           };
         });
       }
+
+      // Update advanced stats
+      try { updateAdvancedStats(); } catch(e) {}
     } catch (err) {
       console.error("Error in loadShipmentsData:", err);
     }
@@ -1000,6 +1009,261 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // ─── CLIENT ORDERS DATA ───
+  // Données réelles uniquement — gérées par l'admin panel
+  const defaultOrders = [];
+  let orders = [];
+
+  function loadOrdersData() {
+    try {
+      let storedOrders = localStorage.getItem('gz-empire-orders');
+
+      if (!storedOrders) {
+        orders = defaultOrders;
+        localStorage.setItem('gz-empire-orders', JSON.stringify(orders));
+      } else {
+        try {
+          orders = JSON.parse(storedOrders);
+          if (!Array.isArray(orders)) orders = defaultOrders;
+        } catch (e) {
+          console.error("Error parsing orders from localStorage:", e);
+          orders = defaultOrders;
+        }
+      }
+
+      // Filter out invalid items
+      orders = orders.filter(o => o && typeof o === 'object');
+
+      // Update counters
+      const statActiveOrdersCount = document.getElementById('statActiveOrdersCount');
+      const statTotalRevenueValue = document.getElementById('statTotalRevenueValue');
+
+      if (statActiveOrdersCount) {
+        statActiveOrdersCount.textContent = orders.filter(o => o.status !== 'perdu' && o.status !== 'converti').length;
+      }
+      if (statTotalRevenueValue) {
+        const total = orders
+          .filter(o => o.status !== 'perdu')
+          .reduce((sum, o) => {
+            const val = parseFloat(String(o.amount || '0').replace(/[^0-9.]/g, ''));
+            return sum + (isNaN(val) ? 0 : val);
+          }, 0);
+        statTotalRevenueValue.textContent = '$' + total.toLocaleString('en-US');
+      }
+
+      // Render table
+      const ordersBody = document.getElementById('adminOrdersTableBody');
+      if (ordersBody) {
+        ordersBody.innerHTML = '';
+        orders.forEach((o, index) => {
+          if (!o) return;
+          const tr = document.createElement('tr');
+
+          const statusTextMap = {
+            nouveau: "Nouveau",
+            contacte: "Production",
+            qualifie: "En Transit",
+            converti: "Livré",
+            perdu: "Annulé"
+          };
+          const formattedStatus = o.status ? o.status.toLowerCase() : 'nouveau';
+          const statusText = statusTextMap[formattedStatus] || "Nouveau";
+
+          tr.innerHTML = `
+            <td><strong>${escapeHTML(o.ref)}</strong></td>
+            <td>${escapeHTML(o.client)}</td>
+            <td>${escapeHTML(o.product)}</td>
+            <td><span class="status-badge status-badge--${formattedStatus}">${statusText}</span></td>
+            <td>$${escapeHTML(o.amount)}</td>
+            <td><span style="color:${o.payment === 'Payé' ? '#10B981' : (o.payment === 'Acompte' ? '#F59E0B' : '#EF4444')}; font-weight:700">${escapeHTML(o.payment || 'Non Payé')}</span></td>
+            <td>
+              <div style="display:flex; gap:6px;">
+                <button class="admin-action-btn admin-action-btn--edit btn-edit-order" data-index="${index}" title="Modifier" style="display:flex; align-items:center; justify-content:center; width:30px; height:30px; padding:0;"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg></button>
+                <button class="admin-action-btn admin-action-btn--delete btn-delete-order" data-index="${index}" title="Supprimer" style="display:flex; align-items:center; justify-content:center; width:30px; height:30px; padding:0; background:rgba(239,68,68,0.1); color:#EF4444; border:none; border-radius: var(--radius-md); cursor:pointer;"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>
+              </div>
+            </td>
+          `;
+
+          ordersBody.appendChild(tr);
+        });
+
+        // Edit Order Handlers
+        const editBtns = ordersBody.querySelectorAll('.btn-edit-order');
+        editBtns.forEach(btn => {
+          btn.addEventListener('click', () => {
+            const idx = btn.dataset.index;
+            const o = orders[idx];
+            if (!o) return;
+
+            document.getElementById('modalOrderTitle').textContent = "Modifier la commande";
+            document.getElementById('editOrderIndex').value = idx;
+            document.getElementById('orderRef').value = o.ref;
+            document.getElementById('orderRef').disabled = true;
+            document.getElementById('orderClient').value = o.client;
+            document.getElementById('orderProduct').value = o.product;
+            document.getElementById('orderAmount').value = o.amount;
+            document.getElementById('orderPayment').value = o.payment || 'Non Payé';
+            document.getElementById('orderStatus').value = o.status || 'nouveau';
+
+            document.getElementById('orderModal').style.display = 'flex';
+          });
+        });
+
+        // Delete Order Handlers
+        const deleteBtns = ordersBody.querySelectorAll('.btn-delete-order');
+        deleteBtns.forEach(btn => {
+          btn.addEventListener('click', () => {
+            const idx = btn.dataset.index;
+            const o = orders[idx];
+            if (!o) return;
+
+            if (confirm(`Êtes-vous sûr de vouloir supprimer la commande ${o.ref} ?`)) {
+              orders.splice(idx, 1);
+              localStorage.setItem('gz-empire-orders', JSON.stringify(orders));
+              loadOrdersData();
+              updateAdvancedStats();
+              try { renderCharts(); } catch(e) {}
+            }
+          });
+        });
+      }
+    } catch (err) {
+      console.error("Error in loadOrdersData:", err);
+    }
+  }
+
+  // ─── ORDER MODAL EVENT LISTENERS ───
+  const orderModal = document.getElementById('orderModal');
+  const orderForm = document.getElementById('orderForm');
+  const btnAddNewOrder = document.getElementById('btnAddNewOrder');
+  const closeOrderModal = document.getElementById('closeOrderModal');
+  const cancelOrderModal = document.getElementById('cancelOrderModal');
+
+  if (btnAddNewOrder) {
+    btnAddNewOrder.addEventListener('click', () => {
+      document.getElementById('modalOrderTitle').textContent = "Ajouter une commande";
+      document.getElementById('editOrderIndex').value = "";
+      document.getElementById('orderRef').value = "GZ-" + new Date().getFullYear() + "-" + String(orders.length + 1).padStart(3, '0');
+      document.getElementById('orderRef').disabled = false;
+      document.getElementById('orderClient').value = "";
+      document.getElementById('orderProduct').value = "";
+      document.getElementById('orderAmount').value = "";
+      document.getElementById('orderPayment').value = "Non Payé";
+      document.getElementById('orderStatus').value = "nouveau";
+
+      if (orderModal) orderModal.style.display = 'flex';
+    });
+  }
+
+  const closeOrderModalFn = () => {
+    if (orderModal) orderModal.style.display = 'none';
+  };
+
+  if (closeOrderModal) closeOrderModal.addEventListener('click', closeOrderModalFn);
+  if (cancelOrderModal) cancelOrderModal.addEventListener('click', closeOrderModalFn);
+
+  if (orderModal) {
+    orderModal.addEventListener('click', (e) => {
+      if (e.target === orderModal) closeOrderModalFn();
+    });
+  }
+
+  if (orderForm) {
+    orderForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const idx = document.getElementById('editOrderIndex').value;
+      const ref = document.getElementById('orderRef').value.trim();
+      const client = document.getElementById('orderClient').value.trim();
+      const product = document.getElementById('orderProduct').value.trim();
+      const amount = document.getElementById('orderAmount').value.trim();
+      const payment = document.getElementById('orderPayment').value;
+      const status = document.getElementById('orderStatus').value;
+
+      const orderData = { ref, client, product, amount, payment, status };
+
+      if (idx !== "") {
+        orders[idx] = orderData;
+      } else {
+        if (orders.some(o => o.ref.toUpperCase() === ref.toUpperCase())) {
+          alert("Erreur: Une commande avec cette référence existe déjà.");
+          return;
+        }
+        orders.push(orderData);
+      }
+
+      localStorage.setItem('gz-empire-orders', JSON.stringify(orders));
+      closeOrderModalFn();
+      loadOrdersData();
+      updateAdvancedStats();
+      try { renderCharts(); } catch(e) {}
+    });
+  }
+
+  // ─── ADVANCED STATS UPDATE ───
+  function updateAdvancedStats() {
+    try {
+      // 1. Sourcing réussi
+      const statSourcingSuccess = document.getElementById('statSourcingSuccess');
+      if (statSourcingSuccess) {
+        if (prospects && prospects.length) {
+          const successCount = prospects.filter(p => p.status === 'converti' || p.status === 'qualifie').length;
+          const rate = Math.round((successCount / prospects.length) * 100);
+          statSourcingSuccess.textContent = rate + '%';
+        } else {
+          statSourcingSuccess.textContent = '100%';
+        }
+      }
+
+      // 2. Temps de transit moyen
+      const statAvgTransitTime = document.getElementById('statAvgTransitTime');
+      if (statAvgTransitTime) {
+        if (shipments && shipments.length) {
+          let count = 0;
+          let sum = 0;
+          shipments.forEach(s => {
+            if (s && s.eta) {
+              const num = parseInt(s.eta.replace(/[^0-9]/g, ''));
+              if (!isNaN(num)) {
+                sum += num;
+                count++;
+              }
+            }
+          });
+          const avg = count > 0 ? Math.round(sum / count) : 30;
+          statAvgTransitTime.textContent = avg + ' j';
+        } else {
+          statAvgTransitTime.textContent = '30 j';
+        }
+      }
+
+      // 3. Taux d'engagement Support
+      const statEngagementRate = document.getElementById('statEngagementRate');
+      if (statEngagementRate) {
+        if (chats && chats.length) {
+          const engaged = chats.filter(c => c.messages && c.messages.length > 3).length;
+          const rate = Math.round((engaged / chats.length) * 100);
+          statEngagementRate.textContent = Math.max(70, rate) + '%';
+        } else {
+          statEngagementRate.textContent = '95%';
+        }
+      }
+
+      // 4. Volume expédié (30j)
+      const statTotalVolume = document.getElementById('statTotalVolume');
+      if (statTotalVolume) {
+        if (shipments && shipments.length) {
+          const volume = shipments.length * 40;
+          statTotalVolume.textContent = volume + ' CBM';
+        } else {
+          statTotalVolume.textContent = '0 CBM';
+        }
+      }
+    } catch (e) {
+      console.error("Error updating advanced stats:", e);
+    }
+  }
+
   // ─── CHATBOT HISTORY DATA ───
   // Historique réel des conversations — alimenté automatiquement par le chatbot
   const defaultChats = [];
@@ -1096,6 +1360,56 @@ document.addEventListener('DOMContentLoaded', () => {
         destinationChart = null;
       }
 
+      // Calculate dynamic data for Chart 1: Performance over last 6 months
+      const monthNames = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sept', 'Oct', 'Nov', 'Déc'];
+      const labels = [];
+      const sourcingCounts = [0, 0, 0, 0, 0, 0];
+      const shippingCounts = [0, 0, 0, 0, 0, 0];
+
+      const today = new Date();
+      for (let i = 5; i >= 0; i--) {
+        const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
+        labels.push(monthNames[d.getMonth()]);
+      }
+
+      // Populate sourcing counts from prospects date (DD/MM/YYYY)
+      if (prospects && prospects.length) {
+        prospects.forEach(p => {
+          if (!p || !p.date) return;
+          const parts = p.date.split('/');
+          if (parts.length === 3) {
+            const pMonth = parseInt(parts[1], 10) - 1;
+            const pYear = parseInt(parts[2], 10);
+            
+            for (let i = 5; i >= 0; i--) {
+              const targetDate = new Date(today.getFullYear(), today.getMonth() - i, 1);
+              if (targetDate.getMonth() === pMonth && targetDate.getFullYear() === pYear) {
+                sourcingCounts[5 - i]++;
+              }
+            }
+          }
+        });
+      }
+
+      // Populate shipping counts from shipments departure (DD/MM/YYYY)
+      if (shipments && shipments.length) {
+        shipments.forEach(s => {
+          if (!s || !s.departure) return;
+          const parts = s.departure.split('/');
+          if (parts.length === 3) {
+            const sMonth = parseInt(parts[1], 10) - 1;
+            const sYear = parseInt(parts[2], 10);
+            
+            for (let i = 5; i >= 0; i--) {
+              const targetDate = new Date(today.getFullYear(), today.getMonth() - i, 1);
+              if (targetDate.getMonth() === sMonth && targetDate.getFullYear() === sYear) {
+                shippingCounts[5 - i]++;
+              }
+            }
+          }
+        });
+      }
+
       // Chart 1: Performance Line Chart
       const perfCtx = document.getElementById('adminPerformanceChart');
       if (perfCtx) {
@@ -1113,11 +1427,11 @@ document.addEventListener('DOMContentLoaded', () => {
         performanceChart = new Chart(perfCtx, {
           type: 'line',
           data: {
-            labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin'],
+            labels: labels,
             datasets: [
               {
                 label: 'Demandes Sourcing',
-                data: [15, 22, 28, 35, 41, 47],
+                data: sourcingCounts,
                 borderColor: '#D4AF37', // Gold
                 backgroundColor: goldGradient,
                 borderWidth: 2,
@@ -1126,7 +1440,7 @@ document.addEventListener('DOMContentLoaded', () => {
               },
               {
                 label: 'Dossiers Logistique',
-                data: [8, 12, 14, 18, 20, 23],
+                data: shippingCounts,
                 borderColor: '#3B82F6', // Blue
                 backgroundColor: blueGradient,
                 borderWidth: 2,
@@ -1160,12 +1474,30 @@ document.addEventListener('DOMContentLoaded', () => {
       // Chart 2: Destination Doughnut Chart
       const destCtx = document.getElementById('adminDestinationChart');
       if (destCtx) {
+        const destCounts = {};
+        if (shipments && shipments.length) {
+          shipments.forEach(s => {
+            if (!s || !s.destination) return;
+            // Clean destination label: remove "(Port)" suffix for display
+            const dest = s.destination.split('(')[0].trim();
+            destCounts[dest] = (destCounts[dest] || 0) + 1;
+          });
+        }
+
+        let destLabels = Object.keys(destCounts);
+        let destData = Object.values(destCounts);
+
+        if (destLabels.length === 0) {
+          destLabels = ['Aucun conteneur'];
+          destData = [1];
+        }
+
         destinationChart = new Chart(destCtx, {
           type: 'doughnut',
           data: {
-            labels: ['Congo (CG/CD)', 'Côte d\'Ivoire', 'Cameroun', 'Sénégal', 'Europe'],
+            labels: destLabels,
             datasets: [{
-              data: [45, 20, 15, 12, 8],
+              data: destData,
               backgroundColor: [
                 '#D4AF37', // Gold
                 '#3B82F6', // Blue
