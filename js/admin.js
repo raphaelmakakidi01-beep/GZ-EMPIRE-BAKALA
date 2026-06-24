@@ -24,9 +24,9 @@
   let prospects = [];
   let chats = [];
 
-  // ─── DATA MIGRATION v3.0 ───
+  // ─── DATA MIGRATION v4.0 ───
   // Purge all old fake demo data on first run of the new version
-  const DATA_VERSION = 'gz-empire-data-v3';
+  const DATA_VERSION = 'gz-empire-data-v4';
   if (localStorage.getItem(DATA_VERSION) !== 'true') {
     // Remove all old fake/demo data
     const keysToClean = [
@@ -45,7 +45,7 @@
     });
     keysToClean.forEach(key => localStorage.removeItem(key));
     localStorage.setItem(DATA_VERSION, 'true');
-    console.info('✅ GZ-EMPIRE v3.0: Migration effectuée — données de démonstration supprimées.');
+    console.info('✅ GZ-EMPIRE v4.0: Migration effectuée — données de démonstration supprimées.');
   }
 
 document.addEventListener('DOMContentLoaded', () => {

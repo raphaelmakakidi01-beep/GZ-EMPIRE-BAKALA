@@ -20,8 +20,8 @@
     };
   }
 
-  // ─── DATA MIGRATION v3.0 ───
-  const DATA_VERSION = 'gz-empire-data-v3';
+  // ─── DATA MIGRATION v4.0 ───
+  const DATA_VERSION = 'gz-empire-data-v4';
   if (localStorage.getItem(DATA_VERSION) !== 'true') {
     ['gz-empire-prospects','gz-empire-shipments','gz-empire-chats',
      'gz-empire-portal-notifications','gz-empire-user-logged','gz-empire-admin-logged','gz-empire-orders'
@@ -246,7 +246,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // ─── DASHBOARD INITIALIZATION ───
   function initializeDashboard() {
     try {
       // Current date render
@@ -265,6 +264,14 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
           greetingEl.textContent = `Bonjour, Client`;
         }
+      }
+
+      // Dynamic avatar
+      const avatarEl = document.querySelector('.dashboard__avatar span');
+      if (avatarEl) {
+        const email = localStorage.getItem('gz-empire-user-email') || 'Client';
+        const initial = email.charAt(0).toUpperCase();
+        avatarEl.textContent = initial;
       }
 
       // Dynamic search input value on login
